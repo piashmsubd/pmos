@@ -29,6 +29,12 @@ jobs:
           pip3 install --upgrade pip
           pip3 install "git+https://gitlab.postmarketos.org/postmarketOS/pmbootstrap.git"
 
+      - name: Prepare pmaports git metadata
+        run: |
+          git -C pmaports init
+          git -C pmaports remote remove origin || true
+          git -C pmaports remote add origin https://gitlab.postmarketos.org/postmarketOS/pmaports.git
+
       - name: Initialize pmbootstrap
         env:
           PMBOOTSTRAP_WORK: ${{ github.workspace }}/workdir
