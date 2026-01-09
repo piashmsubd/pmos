@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
       - name: Install system dependencies
         run: |
@@ -27,7 +27,7 @@ jobs:
       - name: Install pmbootstrap
         run: |
           pip3 install --upgrade pip
-          pip3 install pmbootstrap
+          pip3 install "git+https://gitlab.com/postmarketOS/pmbootstrap.git"
 
       - name: Initialize pmbootstrap
         env:
