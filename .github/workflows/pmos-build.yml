@@ -41,6 +41,18 @@ jobs:
           git -C pmaports branch -M master
           git -C pmaports update-ref refs/remotes/origin/master master
 
+      - name: Write pmbootstrap config
+        env:
+          PMBOOTSTRAP_WORK: ${{ github.workspace }}/workdir
+        run: |
+          cat > "$PMBOOTSTRAP_WORK/pmbootstrap.cfg" <<'EOF'
+[config]
+aports = /home/runner/work/pmos/pmos/pmaports
+channel = edge
+device = nubia-nx669j
+work = /home/runner/work/pmos/pmos/workdir
+EOF
+
       - name: Initialize pmbootstrap
         env:
           PMBOOTSTRAP_WORK: ${{ github.workspace }}/workdir
@@ -49,9 +61,8 @@ jobs:
           yes "" | pmbootstrap \
             -p "${{ github.workspace }}/pmaports" \
             -w "$PMBOOTSTRAP_WORK" \
-            init \
-            -d nubia-nx669j \
-            -c edge
+            -c "$PMBOOTSTRAP_WORK/pmbootstrap.cfg" \
+            init
 
       - name: Build linux-nubia-nx669j
         env:
