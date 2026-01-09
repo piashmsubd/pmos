@@ -37,7 +37,6 @@ jobs:
           yes "" | pmbootstrap \
             -p "${{ github.workspace }}/pmaports" \
             -w "$PMBOOTSTRAP_WORK" \
-            --mirror-alpine https://mirror.postmarketos.org \
             init
 
       - name: Build linux-nubia-nx669j
