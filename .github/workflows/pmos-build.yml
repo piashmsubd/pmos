@@ -27,7 +27,7 @@ jobs:
       - name: Install pmbootstrap
         run: |
           pip3 install --upgrade pip
-          pip3 install "git+https://gitlab.com/postmarketOS/pmbootstrap.git"
+          pip3 install "git+https://gitlab.postmarketos.org/postmarketOS/pmbootstrap.git"
 
       - name: Initialize pmbootstrap
         env:
