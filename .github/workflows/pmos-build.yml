@@ -47,12 +47,12 @@ jobs:
           PMBOOTSTRAP_WORK: ${{ github.workspace }}/workdir
         run: |
           cat > "$PMBOOTSTRAP_WORK/pmbootstrap.cfg" <<'EOF'
-[config]
-aports = /home/runner/work/pmos/pmos/pmaports
-channel = edge
-device = nubia-nx669j
-work = /home/runner/work/pmos/pmos/workdir
-EOF
+          [config]
+          aports = /home/runner/work/pmos/pmos/pmaports
+          channel = edge
+          device = nubia-nx669j
+          work = /home/runner/work/pmos/pmos/workdir
+          EOF
 
       - name: Initialize pmbootstrap
         env:
