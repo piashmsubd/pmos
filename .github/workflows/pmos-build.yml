@@ -1,0 +1,46 @@
+name: pmos-build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip git
+
+      - name: Install pmbootstrap
+        run: |
+          pip3 install --upgrade pip
+          pip3 install pmbootstrap
+
+      - name: Initialize pmbootstrap
+        env:
+          PMBOOTSTRAP_WORK: ${{ github.workspace }}/workdir
+        run: |
+          mkdir -p "$PMBOOTSTRAP_WORK"
+          yes "" | pmbootstrap init \
+            --aports "${{ github.workspace }}/pmaports" \
+            --mirror-alpine https://mirror.postmarketos.org \
+            --workdir "$PMBOOTSTRAP_WORK"
+
+      - name: Build linux-nubia-nx669j
+        env:
+          PMBOOTSTRAP_WORK: ${{ github.workspace }}/workdir
+        run: |
+          pmbootstrap build linux-nubia-nx669j --force --workdir "$PMBOOTSTRAP_WORK"

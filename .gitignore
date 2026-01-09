@@ -1,0 +1,16 @@
+work/
+.pmbootstrap-venv/
+.local/
+*.img
+*.tar.gz
+android-sdk/
+images/
+super_out/
+boot-unpack/
+dtbo-unpack/
+vendor_boot-unpack/
+work/
+.pmbootstrap-venv/
+.local/
+*.img
+*.tar.gz

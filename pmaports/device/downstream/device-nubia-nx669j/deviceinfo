@@ -1,0 +1,52 @@
+# Reference: https://wiki.postmarketos.org/wiki/Deviceinfo_reference
+deviceinfo_format_version="0"
+deviceinfo_name="Nubia RedMagic 6s Pro"
+deviceinfo_manufacturer="Nubia"
+deviceinfo_codename="nubia-nx669j"
+deviceinfo_year="2021"
+deviceinfo_dtb=""
+deviceinfo_append_dtb="true"
+
+# CRITICAL: DTB is inside the kernel image (appended) on Qualcomm devices
+# The stock boot.img has DTBs concatenated - we'll handle this in build
+
+deviceinfo_arch="aarch64"
+
+# Qualcomm Snapdragon 888+ (SM8350)
+deviceinfo_chassis="handset"
+
+# Boot
+deviceinfo_flash_method="fastboot"
+deviceinfo_kernel_cmdline="console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0x00988000 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 msm_rtb.filter=0x237 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=0 loop.max_part=7 cgroup.memory=nokmem,nosocket reboot=panic_warm printk.devkmsg=on firmware_class.path=/vendor/firmware pcie_ports=compat"
+
+# Display - CRITICAL for black screen fix
+deviceinfo_screen_width="1080"
+deviceinfo_screen_height="2400"
+
+# Fastboot
+deviceinfo_flash_offset_base="0x00000000"
+deviceinfo_flash_offset_kernel="0x00008000"
+deviceinfo_flash_offset_ramdisk="0x01000000"
+deviceinfo_flash_offset_second="0x00000000"
+deviceinfo_flash_offset_tags="0x00000100"
+deviceinfo_flash_pagesize="4096"
+
+# Boot image v3 (Android 11+)
+deviceinfo_bootimg_qcdt="false"
+deviceinfo_bootimg_mtk_mkimage="false"
+deviceinfo_bootimg_dtb_second="false"
+
+# Header version 3 as shown in boot-unpack/header.txt
+deviceinfo_header_version="3"
+
+# For vendor_boot (Android 11+ with boot header v3)
+deviceinfo_flash_sparse="true"
+
+# Modules path
+deviceinfo_modules_initfs=""
+
+# External storage
+deviceinfo_external_storage="true"
+
+# USB networking for debugging
+deviceinfo_usb_network_function="ncm"

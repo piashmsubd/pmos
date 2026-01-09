@@ -1,0 +1,90 @@
+# Maintainer: Your Name <your@email.com>
+# Kernel for Nubia RedMagic 6s Pro (NX669J)
+# Based on MSM-5.4 kernel from Nubia
+
+_flavor="nubia-nx669j"
+pkgname=linux-$_flavor
+pkgver=5.4
+pkgrel=0
+pkgdesc="Nubia RedMagic 6s Pro kernel"
+arch="aarch64"
+_carch="arm64"
+url="https://github.com/nicokarg/NX669J-kernel"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	findutils
+	flex
+	linux-headers
+	openssl-dev
+	perl
+	python3
+	clang
+	llvm
+	lld
+"
+
+# Source: your local kernel, adjust as needed
+_repository="NX669J-kernel"
+_commit="msm-5.4"
+_config="config-$_flavor.$arch"
+source="
+	$_config
+"
+builddir="$srcdir/msm-5.4"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/$_config" "$builddir"/.config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC=clang \
+		HOSTCC=clang \
+		LD=ld.lld \
+		AR=llvm-ar \
+		NM=llvm-nm \
+		OBJCOPY=llvm-objcopy \
+		OBJDUMP=llvm-objdump \
+		STRIP=llvm-strip \
+		CROSS_COMPILE=aarch64-linux-gnu- \
+		olddefconfig
+	make ARCH="$_carch" CC=clang \
+		HOSTCC=clang \
+		LD=ld.lld \
+		AR=llvm-ar \
+		NM=llvm-nm \
+		OBJCOPY=llvm-objcopy \
+		OBJDUMP=llvm-objdump \
+		STRIP=llvm-strip \
+		CROSS_COMPILE=aarch64-linux-gnu- \
+		-j$(nproc)
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	
+	install -Dm644 "$builddir/arch/$_carch/boot/Image" \
+		"$pkgdir/boot/vmlinuz"
+	
+	make modules_install \
+		ARCH="$_carch" \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+SKIP_FOR_NOW  config-nubia-nx669j.aarch64
+"

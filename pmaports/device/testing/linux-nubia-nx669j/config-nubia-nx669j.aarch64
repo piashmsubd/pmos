@@ -1,0 +1,110 @@
+# PostmarketOS kernel config for Nubia RedMagic 6s Pro (NX669J)
+# Based on lahaina-qgki_defconfig + NX669J_diff
+# SM8350 / Snapdragon 888+
+
+# CRITICAL: Debug/PSTORE for panic logs
+CONFIG_PSTORE=y
+CONFIG_PSTORE_CONSOLE=y
+CONFIG_PSTORE_PMSG=y
+CONFIG_PSTORE_RAM=y
+CONFIG_PSTORE_FTRACE=y
+
+# Enable ramoops for crash dumps
+CONFIG_RAMOOPS=y
+
+# Early console for debugging black screen
+CONFIG_SERIAL_MSM_GENI=y
+CONFIG_SERIAL_MSM_GENI_CONSOLE=y
+CONFIG_SERIAL_MSM_GENI_EARLY_CONSOLE=y
+
+# Framebuffer support (try simplefb first, fallback to MSM DRM)
+CONFIG_FB=y
+CONFIG_FB_SIMPLE=y
+CONFIG_FB_EFI=y
+CONFIG_FRAMEBUFFER_CONSOLE=y
+CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+CONFIG_VT=y
+CONFIG_VT_CONSOLE=y
+
+# Qualcomm DRM/Display (primary for this SoC)
+CONFIG_DRM=y
+CONFIG_DRM_MSM=y
+CONFIG_DRM_MSM_DSI=y
+CONFIG_DRM_MSM_DP=y
+
+# CRITICAL: Disable Android-specific networking restrictions
+# CONFIG_ANDROID_PARANOID_NETWORK is not set
+
+# PostmarketOS requirements
+CONFIG_DEVTMPFS=y
+CONFIG_DEVTMPFS_MOUNT=y
+CONFIG_TMPFS=y
+CONFIG_TMPFS_POSIX_ACL=y
+CONFIG_PROC_FS=y
+CONFIG_SYSFS=y
+
+# USB gadget for initramfs debug
+CONFIG_USB_GADGET=y
+CONFIG_USB_CONFIGFS=y
+CONFIG_USB_CONFIGFS_F_FS=y
+CONFIG_USB_CONFIGFS_SERIAL=y
+
+# Network basics (without paranoid restrictions)
+CONFIG_NET=y
+CONFIG_UNIX=y
+CONFIG_INET=y
+CONFIG_PACKET=y
+CONFIG_NETFILTER=y
+
+# Input
+CONFIG_INPUT_EVDEV=y
+CONFIG_INPUT_TOUCHSCREEN=y
+
+# Crypto
+CONFIG_CRYPTO=y
+CONFIG_CRYPTO_AES=y
+CONFIG_CRYPTO_SHA256=y
+
+# Compression
+CONFIG_RD_GZIP=y
+CONFIG_RD_LZ4=y
+
+# Disable problematic Android features
+# CONFIG_ANDROID_BINDER_IPC is not set
+# CONFIG_ANDROID_BINDERFS is not set
+# CONFIG_ASHMEM is not set
+
+# Keep necessary Android features for hybrid boot
+CONFIG_ANDROID_BINDER_IPC=y
+CONFIG_ASHMEM=y
+
+# Watchdog (may cause reboot if not handled)
+CONFIG_WATCHDOG=y
+CONFIG_QCOM_WDT_CORE=y
+CONFIG_QCOM_SOC_WATCHDOG=y
+# Disable forcing bite on panic for initial debugging
+# CONFIG_QCOM_FORCE_WDOG_BITE_ON_PANIC is not set
+
+# Debug options
+CONFIG_DEBUG_INFO=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_PRINTK_TIME=y
+CONFIG_EARLY_PRINTK=y
+
+# EXT4 and other filesystems
+CONFIG_EXT4_FS=y
+CONFIG_F2FS_FS=y
+CONFIG_VFAT_FS=y
+CONFIG_FUSE_FS=y
+CONFIG_OVERLAY_FS=y
+
+# Critical for Alpine/postmarketOS
+CONFIG_CGROUPS=y
+CONFIG_BLK_CGROUP=y
+CONFIG_CGROUP_SCHED=y
+CONFIG_MEMCG=y
+
+# Module support
+CONFIG_MODULES=y
+CONFIG_MODULE_UNLOAD=y
