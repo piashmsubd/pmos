@@ -39,6 +39,7 @@ jobs:
           git -C pmaports add .
           git -C pmaports commit -m "ci: snapshot pmaports" || true
           git -C pmaports branch -M master
+          git -C pmaports update-ref refs/remotes/origin/master master
 
       - name: Initialize pmbootstrap
         env:
@@ -48,7 +49,9 @@ jobs:
           yes "" | pmbootstrap \
             -p "${{ github.workspace }}/pmaports" \
             -w "$PMBOOTSTRAP_WORK" \
-            init
+            init \
+            --device nubia-nx669j \
+            --channel edge
 
       - name: Build linux-nubia-nx669j
         env:
