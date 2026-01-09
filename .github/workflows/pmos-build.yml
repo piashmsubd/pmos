@@ -50,8 +50,8 @@ jobs:
             -p "${{ github.workspace }}/pmaports" \
             -w "$PMBOOTSTRAP_WORK" \
             init \
-            --device nubia-nx669j \
-            --channel edge
+            -d nubia-nx669j \
+            -c edge
 
       - name: Build linux-nubia-nx669j
         env:
