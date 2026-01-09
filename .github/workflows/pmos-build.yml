@@ -1,4 +1,4 @@
-name: pmos-build
+name: pmos-build piash 
 
 on:
   push:
