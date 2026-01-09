@@ -1,0 +1,37 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-lenovo-a6020a40
+pkgdesc="Lenovo Vibe K5"
+pkgver=5
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916
+	 soc-qcom-msm8939 soc-qcom-msm8916-rproc"
+makedepends="devicepkg-dev"
+source="deviceinfo modules-initfs"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="GPU/WiFi/BT/Modem/Video firmware"
+	depends="firmware-qcom-adreno-a420 msm-firmware-loader
+		firmware-lenovo-a6020-wcnss-nv
+		firmware-lenovo-a6020-venus"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+2a37024293fa9f971df4df21941409560e22ba5d9cbaa7a3252d7abd28ee19707a88f6d3fc11ec9b9b7117abd14085b58cb830c1dc8f65faf073c568606a28c6  deviceinfo
+36791d00fdb1856c8b2e25f7ce675cd177262809348b218dd66f7e55e92f5f6e22699860d9a667d12169da75685787074a4d06d5cf49f64d5cb83be74ccf0533  modules-initfs
+"

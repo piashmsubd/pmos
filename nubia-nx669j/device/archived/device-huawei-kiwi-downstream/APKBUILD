@@ -1,0 +1,32 @@
+# Archived: Downstream port, only for testing. Use mainline port (huawei-kiwi)!
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-huawei-kiwi-downstream
+pkgdesc="Huawei Honor 5X (Downstream)"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-huawei-kiwi-downstream mkbootimg msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Modem/GPU/WiFi/BT/Video firmware"
+	depends="linux-firmware-qcom firmware-huawei-kiwi firmware-qcom-adreno-a420"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+12ad849642a8548a5d17c24ee4a5a2c0b2d7d2c2f15528e4fff52ce03b17cdc9c898dcc5dc20949b9cc6157613dbc2b180ede47a532b30b621c75002e2a33711  deviceinfo
+"

@@ -1,0 +1,66 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Jenneron <jenneron@protonmail.com>
+# Co-Maintainer: Jethrob <jeybee@hotmail.com>
+pkgname=device-microsoft-surface-rt
+pkgdesc="Microsoft Surface RT"
+pkgver=8
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+# pmb:strict: avoid grub-related install error during build with pmbootstrap
+options="!check !archcheck pmb:strict"
+depends="
+	alsa-ucm-conf
+	linux-postmarketos-grate
+	postmarketos-base
+"
+makedepends="devicepkg-dev grub grub-efi"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-x11
+"
+source="deviceinfo modules-initfs"
+
+build() {
+	devicepkg_build $startdir $pkgname
+
+	grub-mkimage \
+		--prefix="/grub" \
+		--output="bootarm.efi" \
+		--format="arm-efi" \
+		--compression="xz" \
+		\
+		disk \
+		fat \
+		gzio \
+		iso9660 \
+		linux \
+		normal \
+		part_gpt \
+		part_msdos
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+
+	install -D bootarm.efi \
+		"$pkgdir"/boot/EFI/Boot/bootarm.efi
+}
+
+nonfree_firmware() {
+	pkgdesc="WiFi firmware"
+	depends="linux-firmware-mrvl"
+	mkdir "$subpkgdir"
+}
+
+x11() {
+	install_if="$pkgname xorg-server"
+	depends="xf86-video-opentegra libvdpau-tegra"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+bde65d6f49ec2f4297cdab667f8c468ef1cc7635bb53151aa52af8ece472f70184b936c6922906dee08d278ed2ec5f8876e974430f619fdb182a88a1489bca02  deviceinfo
+67ff4306270b7e6e292ddb48ac5fcb1472840d8eaa412f9cd989442fb20139ee3c844fd1ca5c5b923c7980403d945999a77fc6617127059e56e22bdc8dca2bf8  modules-initfs
+"

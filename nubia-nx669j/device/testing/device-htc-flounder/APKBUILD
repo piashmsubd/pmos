@@ -1,0 +1,35 @@
+# Maintainer: Segfault <awarnecke002@hotmail.com>
+pkgname=device-htc-flounder
+pkgdesc="Google Nexus 9"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-htc-flounder
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Google Nexus 9 firmware"
+	depends="linux-firmware-brcm linux-firmware-nvidia firmware-htc-flounder"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+c0a2e6fa56ac477e9329eb6fc93aec093d15634f4134d835d44c3faaa661e7fecb67e40db1a49c4c0536abaaf2fbd85390f814e5b43a5e6260286df05adaaaad  deviceinfo
+"

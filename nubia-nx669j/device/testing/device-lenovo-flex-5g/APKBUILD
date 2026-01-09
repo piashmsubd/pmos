@@ -1,0 +1,32 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Jenneron <jenneron@protonmail.com>
+pkgname=device-lenovo-flex-5g
+pkgdesc="Lenovo Flex 5G"
+pkgver=4
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-qcom-sc8180x>=6.6.0
+	postmarketos-base
+	soc-qcom-sc8180x
+	systemd-boot
+"
+makedepends="devicepkg-dev"
+source="deviceinfo modules-initfs"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+d71f434adb971fbf7896e87948ddfc60e4315e784dd7c397753e43334fce3a728a4a0467225b6a27eb82e804dcba046221a32b89e42b523b8c6b1893b488fb79  deviceinfo
+438f30d14ad15fa87e5fa3b5127e5430af35cdddc400d2a01acbba6487792a602fcf3400e2c42ee991e6785fe62b083030ea977292efa88dacb3fcbe03bc32d7  modules-initfs
+"

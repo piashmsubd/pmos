@@ -1,0 +1,24 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-inet-a33
+pkgdesc="iNet Tek D70 A33"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="GPL-3.0-or-later"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-allwinner
+	postmarketos-base
+	u-boot-q8-a33-tablet
+	"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+724ab83db127361e05c6d0b59c7966b77e94978715c655538bc40794fee0ca1e125edff825f7bfaef638784a199557234cae20442a2f706bf5b7c0f7469b459f  deviceinfo
+"

@@ -1,0 +1,35 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-htc-leo
+pkgdesc="HTC HD2"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	postmarketos-base
+	postmarketos-base-downstream
+	linux-htc-leo
+	mkbootimg
+	msm-fb-refresher
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Wifi firmware"
+	depends="firmware-aosp-broadcom-wlan"
+	mkdir "$subpkgdir"
+}
+sha512sums="
+e862e7358cb57d16084b1620f8945740e8c1b46c4be7aec54d71749e6074924d21c85b365f09443485f68b18f9a7538cf5854cf51e5bebea6f463f93d964e69b  deviceinfo
+"

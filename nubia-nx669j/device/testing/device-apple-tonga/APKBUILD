@@ -1,0 +1,32 @@
+# Maintainer: EDKPiepaint <2163971449v@gmail.com>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-apple-tonga
+pkgdesc="Apple Macbook Air M1"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-asahi
+	postmarketos-base
+	systemd-boot
+	asahi-audio
+	asahi-fwextract
+	asahi-scripts
+	alsa-ucm-conf-asahi
+"
+makedepends="devicepkg-dev systemd-boot"
+source="deviceinfo"
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+25b9b3365aa7c3ee99ca7a71aa9f4698c734421dfd39624a6a48b6128ccc3b2609b97cc70e99547bec89fab73395b5467983332e39ca99dd7570a5822c33fe2c  deviceinfo
+"

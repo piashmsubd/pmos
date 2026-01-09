@@ -1,0 +1,65 @@
+# Maintainer: Jens Reidel <adrian@travitia.xyz>
+# Co-Maintainer: Danila Tikhonov <danila@jiaxyga.com>
+# Co-Maintainer: David Wronek <david@mainlining.org>
+# Co-Maintainer: Arian Kulmer <arian.kulmer@web.de>
+# Reference: <https://postmarketos.org/devicepkg>
+
+pkgname=device-qcom-sm7150
+pkgdesc="Generic device package for Qualcomm SM7150 devices"
+pkgver=6
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	alsa-ucm-conf-qcom-sm7150
+	firmware-qcom-sm7150
+	hexagonrpcd
+	linux-postmarketos-qcom-sm7150
+	make-dynpart-mappings
+	postmarketos-base
+	soc-qcom
+	soc-qcom-modem
+	soc-qcom-qbootctl
+	systemd-boot
+	unl0kr-fbforcerefresh
+"
+makedepends="devicepkg-dev"
+install="$pkgname-openrc.post-install"
+subpackages="
+	$pkgname-openrc
+"
+
+source="
+	81-libssc-180-degrees.rules
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/81-libssc-180-degrees.rules -t \
+		"$pkgdir"/usr/lib/udev/rules.d
+}
+
+openrc() {
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	depends="
+		hexagonrpcd-openrc
+		openrc
+		qbootctl-openrc
+		tqftpserv-openrc
+		"
+
+	mkdir -p "$subpkgdir"
+}
+
+sha512sums="
+2c16ba75e0077b2b1eaefa4c73b287475505a1aeb291ec29316d41cc094277320f9d2aaabfd91eb1dc0f488ab2d61a94faef16e7afe0f1e226779113761b9a37  81-libssc-180-degrees.rules
+b771b3939f285981c200faa001e9aea785ee48de4523a5b398e926ccd5eb6a55ead1363e7869d8844c6ed92d9220b590ae80cfc7a4dc6bec13876f7447c96576  deviceinfo
+"

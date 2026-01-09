@@ -1,0 +1,32 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-ark-peach
+pkgdesc="ARK Benefit A3"
+pkgver=4
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916 soc-qcom-msm8916"
+makedepends="devicepkg-dev"
+source="deviceinfo modules-initfs"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="GPU/WiFi/BT/Modem/Video firmware"
+	depends="firmware-qcom-adreno-a300 msm-firmware-loader firmware-qcom-msm8916-wcnss firmware-qcom-msm8916-venus firmware-ark-peach-wcnss-nv"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+d271314479b303a5fbeb38c4faa46a331e8c4680f70fb901713bc69605c0e004d1b4121c506fead3a0734165cefafb38eebb9e49ff10262efeb95cecc579b75c  deviceinfo
+ae478cf0d7e6da4efdd14398400c4d261dff7093d81d82570ebcefc7fd23d7ae148489eafb60c548ab788b3c5b715a2de8a95b625ad64b225ad9f8378de74dde  modules-initfs
+"

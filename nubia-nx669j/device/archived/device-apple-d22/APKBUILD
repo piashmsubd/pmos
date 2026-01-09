@@ -1,0 +1,31 @@
+# Archived: Replaced by apple-idevice
+
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-apple-d22
+pkgdesc="Apple iPhone X (Global)"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-apple-16k
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+ff755a83597c073aafbd1c6d0d0671129dd5a14c3133df0c53562e7322c904a3c228f863ddc33da0085b7a786b1d3af9430f2a03b7b38f5275ba3357c2351e8b  deviceinfo
+"

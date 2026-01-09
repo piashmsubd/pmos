@@ -1,0 +1,34 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-motorola-falcon
+pkgdesc="Moto G (2013)"
+pkgver=5
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	firmware-motorola-falcon
+	linux-postmarketos-qcom-msm8226
+	mkbootimg
+	postmarketos-base
+	soc-qcom-msm8226
+	"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+	"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+0c0b8e55cded1cc04997cf1aae55fef5dc01c2437dac929dd216481be639af44fc32128f37ac0690bb24b12103123d74e6f0f76b22ec10532c2d5909028a838f  deviceinfo
+35701f944fb4d1dd365fb2d3363620271ce748647c7462e9e8d6a2447df766f94cf1d07aa366c66c745fbb0fdaa6960e3f77176f9b6f4f9ca0dbc5d2f5989067  modules-initfs
+"

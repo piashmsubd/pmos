@@ -1,0 +1,25 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-lg-p700
+pkgdesc="LG Optimus L7"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-lg-p700 mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+10ede98f67178e39447762702fcd388675e617b312d78626b75962d5ec20e25fc5865b666f388802414114b2616e19a1a5a3768febd6402699a9fe5e11b1cad7  deviceinfo
+"

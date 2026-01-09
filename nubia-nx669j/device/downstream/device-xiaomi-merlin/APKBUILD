@@ -1,0 +1,30 @@
+# Maintainer: Natalia M. Sother <meli.soweli@icloud.com>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-merlin
+pkgdesc="Xiaomi Redmi Note 9"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-xiaomi-merlin
+	mkbootimg
+	postmarketos-base
+	msm-fb-refresher
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+524cf42528855213df1ea8c6258e317621ad3b1159ec12c8332ff8f8d1a6db02fe3f0db8fb4fe664ef7997a8a89311d0cce9d7a35ec11cc36fb1933f5236347d  deviceinfo
+"

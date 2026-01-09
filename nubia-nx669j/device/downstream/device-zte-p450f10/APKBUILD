@@ -1,0 +1,28 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-zte-p450f10
+pkgdesc="ZTE Blade V9"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-zte-p450f10
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+8b979c15dc3d2e8b882e730d8d306cf4115b15c9deafa7d142412ab338b3012cfa8fc2e27c4088a54fc5c05aa45d7caa2813d0fb1ce0c663a4453125466f01d4  deviceinfo
+"

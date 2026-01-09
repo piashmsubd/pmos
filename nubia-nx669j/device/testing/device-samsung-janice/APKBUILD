@@ -1,0 +1,35 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-janice
+pkgdesc="Samsung Galaxy S Advance"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base mkbootimg linux-postmarketos-stericsson"
+makedepends="devicepkg-dev"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Wifi firmware"
+	depends="firmware-samsung-janice"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+89666d660a411f99298ab2288bfec3c4ce90a3d6eadd9ff30a342d392ae89d3b8ff1ce888706e69b174180b3da1a45c120bb265f148840e16df42c8304799d7e  deviceinfo
+"

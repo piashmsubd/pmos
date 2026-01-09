@@ -1,0 +1,29 @@
+# Maintainer: Alexey Minnekhanov <alexeymin@postmarketos.org>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-cepheus
+pkgdesc="Xiaomi Mi 9"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-qcom-sm8150
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+e24321e4fb1a8908ddabf37df4ba168856ac7e3261933e3c44a488dcf1007d11d43f62fd72c0a0875d5924d0b09cfb437c1ed327cdb075391ceecb9e22baaf30  deviceinfo
+"

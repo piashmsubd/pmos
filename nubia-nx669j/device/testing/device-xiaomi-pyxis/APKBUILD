@@ -1,0 +1,44 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Alicja Michalska <ellyqw@mainlining.org>
+pkgname=device-xiaomi-pyxis
+pkgdesc="Xiaomi Mi 9 Lite"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	alsa-ucm-conf-qcom-sdm670
+	linux-firmware-ath10k
+	linux-firmware-qca
+	linux-firmware-qcom
+	linux-xiaomi-pyxis
+	firmware-xiaomi-pyxis
+	make-dynpart-mappings
+	mkbootimg
+	postmarketos-base
+	soc-qcom
+	soc-qcom-modem
+	soc-qcom-pd-mapper
+	soc-qcom-qbootctl
+	unl0kr-fbforcerefresh
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+9fac3915a869f35c927d3704019600e1d73e852bb6883e0ecb16743cc187d4c1124c6210185356c64e5cbd72cfb4478d7a331e5b2eb92ec24c04db9c938e123b  deviceinfo
+06dfc9f41ab196406300acddd411c95f8ba47f49be01a291b4a33767d56b88a16741306223ec767930b71ab08aab82a29f0dacbde2bb45c32de1728b6cb35b14  modules-initfs
+"

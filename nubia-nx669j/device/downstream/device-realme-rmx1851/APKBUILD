@@ -1,0 +1,37 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-realme-rmx1851
+pkgdesc="Realme 3 Pro"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-realme-rmx1851
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Crypto, Fingerprint, Camera, ect Firmware"
+	depends="firmware-realme-rmx1851"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+d9f0d23890610e83e6fb478ec71374b337e36dbaac0575c2fa9d8eadf0276b5697a8c22a9e5666fdc5bc1fb7923e622b8ad03b3ace8b4c27d3e2f13fa0a32913  deviceinfo
+"

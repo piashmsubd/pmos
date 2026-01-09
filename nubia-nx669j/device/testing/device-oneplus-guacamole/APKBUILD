@@ -1,0 +1,31 @@
+# Maintainer: Casey Connolly <kcxt@postmarketos.org>
+# Co-Maintainer: Uclydde <julianbraha@gmail.com>
+# Reference: <https://postmarketos.org/devicepkg>
+
+pkgname=device-oneplus-guacamole
+pkgdesc="OnePlus 7 Pro"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-qcom-sm8150
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+705ccdfdd2621a5f683c2a68a80494e9ad4262fa06310fe013e8f9a3ceac4e8679bdae0d2cb1fd3cecf619378205da58ee5591152944492f988cabd92ddca4dc  deviceinfo
+"

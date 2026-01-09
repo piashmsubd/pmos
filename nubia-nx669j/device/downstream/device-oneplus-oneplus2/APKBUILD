@@ -1,0 +1,27 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-oneplus-oneplus2
+pkgdesc="OnePlus 2"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-oneplus-oneplus2 mkbootimg msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo
+	initfs-hook.sh
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+b510f170e76a8bdf02b8da323186071332f929faeb669b68201ed28d92eb96499de944e985985ac4dc55baebfdc734860e868eed46aa39735fed874b9d2bd6e6  deviceinfo
+abf299888a7a2eafc483a0077b0a60ff04a9c85e54c09758896a15d5d4fe0359765d078797d6791acd0ca5ede2f46dac2674fadbbbf0905d81e9a01e97d8b470  initfs-hook.sh
+"

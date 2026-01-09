@@ -1,0 +1,35 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-semc-anzu
+pkgdesc="Xperia Arc"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armhf"
+options="!check !archcheck"
+depends="postmarketos-base linux-semc-anzu msm-fb-refresher mkbootimg"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="
+	deviceinfo
+	modules-load.conf
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Wifi firmware"
+	depends="linux-firmware"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+9443a17e381b6ccca92b9eac39088b3cb312d320499a119dacdcd8430af7ae24b8119df0cf50a7adea46ecdaab17c6a2fd50738920e623625b14bf9cbdf33d28  deviceinfo
+fc2241310bfc9777cd2240857d9176c48dbc8bdbd871b280e2703a2dce7c3810c0a36b78557088d81a161900c74ece2015c40b3c7e72f7970b46a3991e7856c2  modules-load.conf
+"

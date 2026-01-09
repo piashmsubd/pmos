@@ -1,0 +1,36 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-zuk-z2-row
+pkgdesc="Lenovo ZUK Z2 Pro"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-zuk-z2-row mkbootimg msm-fb-refresher wcnss-wlan"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+install="$pkgname.post-install"
+source="
+	deviceinfo
+	modules-load.conf
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="ZUK Z2 Pro firmware blobs"
+	depends="firmware-zuk-z2-row wcnss-wlan adsp-audio"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+7c35b7304a1288ebb30185da7d09a4643af8b0d0d49ee45d11f46399f57d12bd3742af7c562607c5c9a7ee94af055dd05faff32c8166ea8605d7e69c4e63af61  deviceinfo
+e85747dc082df4fd793bc444f1a47c22459ceb411befed90827a079c4cba21d013c3324194b169bf50e0fdf3d49d6d242b3d31947d5c0a1e58d9c4d1cf78bd22  modules-load.conf
+"

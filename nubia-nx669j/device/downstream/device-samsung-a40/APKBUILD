@@ -1,0 +1,25 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-a40
+pkgdesc="Samsung Galaxy A40"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="linux-samsung-a40 mkbootimg postmarketos-base rsyslog firmware-samsung-a40"
+makedepends="devicepkg-dev"
+source="deviceinfo initfs-hook.sh"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+5d0cf2929b7cfbc7c739dd14148bb973110353d92a8d0b0ad55a21901b99870ac038b5f73b2b0436c0873489be35b9788a680a4eab70d14e6b6add36e67741e8  deviceinfo
+04445194a5245d08fcf1b425bff1d8dd6a8fdacafdc151223634299a35f1eb20fbd733979b58bcfd854e16fde02629c28453f840d6c9dc34fc15d4fcc8aa4302  initfs-hook.sh
+"

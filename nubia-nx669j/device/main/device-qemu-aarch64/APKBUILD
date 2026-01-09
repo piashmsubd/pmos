@@ -1,0 +1,85 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Minecrell <minecrell@minecrell.net>
+# Co-Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
+pkgname=device-qemu-aarch64
+pkgver=14
+pkgrel=0
+pkgdesc="Simulated device in QEMU (aarch64)"
+url="https://postmarketos.org"
+arch="aarch64"
+license="MIT"
+depends="
+	postmarketos-base
+	postmarketos-qemu-common
+	systemd-boot
+	"
+makedepends="devicepkg-dev"
+subpackages="
+	$pkgname-kernel-lts:kernel_lts
+	$pkgname-kernel-virt:kernel_virt
+	$pkgname-kernel-stable:kernel_stable
+	$pkgname-pmtest
+	"
+
+source="
+	deviceinfo
+	"
+options="!check !archcheck"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+mce() {
+	pkgdesc="Prevents screen blanking for UI's using mce (Glacier, Asteroid)"
+	install_if="$pkgname=$pkgver-r$pkgrel mce"
+	install -Dm644 "$srcdir"/mce-display-blanking.conf \
+		"$subpkgdir"/etc/mce/50display-blanking.conf
+}
+
+sway() {
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-sway"
+	depends="postmarketos-ui-sway-logo-key-alt"
+	mkdir "$subpkgdir"
+}
+
+x11() {
+	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
+	install -Dm644 "$srcdir"/resolution-qemu-X11.conf \
+		"$subpkgdir"/usr/share/X11/xorg.conf.d/10-resolution-qemu-X11.conf
+}
+
+kernel_virt() {
+	pkgdesc="Alpine Virt kernel (minimal, no audio)"
+	depends="linux-virt"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_lts() {
+	pkgdesc="Alpine LTS kernel"
+	depends="linux-lts linux-firmware-none"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_stable() {
+	pkgdesc="Alpine Stable kernel"
+	depends="linux-stable linux-firmware-none"
+	provides="$pkgname-kernel-edge=$pkgver-r$pkgrel"
+	replaces="$pkgname-kernel-edge"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+pmtest() {
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
+	depends="postmarketos-test-unl0kr"
+
+	mkdir -p "$subpkgdir"
+}
+
+sha512sums="
+47ec1ad6851e6025d02158bdf466491e6100b489dd3ff57b82774a6c3eb24504c6f5bc8381686edd36a7d6cceebfadc978a1da08cc93cb6d587a6bc0cfe488d8  deviceinfo
+"

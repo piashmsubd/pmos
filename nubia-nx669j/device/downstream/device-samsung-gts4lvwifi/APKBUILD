@@ -1,0 +1,30 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-gts4lvwifi
+pkgdesc="Samsung Galaxy Tab S5e (SM-T720)"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-samsung-gts4lvwifi
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+73c0d720f17c31d8763311cd5c92fefd6dfd3c5f7942643c17b5d6ef22a581838e2ee2f88f51dcf15389e7cd70a207d3b74936052834c7150a4aae763f9a41f2  deviceinfo
+"

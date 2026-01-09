@@ -1,0 +1,25 @@
+# Archived: Kernel does not build anymore
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-a3y17lte
+pkgdesc="Samsung Galaxy A3 (2017)"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base postmarketos-base-downstream linux-samsung-a3y17lte mkbootimg msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+8faef9b4e12d64fd972196b95d5ba010253113d15a7672d5031b7cf6ceff706d885efb601d43e973e8810ee7a547bcefab53194351bceaa0a4b10699bd3c80c9  deviceinfo
+"

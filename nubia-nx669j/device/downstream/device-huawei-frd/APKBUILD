@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-huawei-frd
+pkgdesc="Huawei Honor 8"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-huawei-frd
+	mkbootimg
+	msm-fb-refresher
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+438ec68c7110cdfab37648c3cecfd8de10f04fbe1384cb56122e35050224acf975769bc6561b69fc3f8ef854c59675b3a73798fbbf34d35a9d2986eb06eccbf3  deviceinfo
+"

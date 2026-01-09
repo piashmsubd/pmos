@@ -1,0 +1,34 @@
+# Archived: Kernel does not build anymore
+# Maintainer: ky0ko <ky0ko@disroot.org>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-motorola-def
+pkgdesc="Motorola Moto One Hyper"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+depends="postmarketos-base linux-motorola-def mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Nonfree firmware metapackage for Motorola One Hyper"
+	depends="firmware-motorola-def"
+	mkdir "$subpkgdir"
+}
+
+
+sha512sums="
+af469ff2346a449b544d92fb254d39f1750adcdb4cfda7ff93aafa272450aa9e409b4fd8a73f7f53b3c9bf17f3fbbfee4b9d84c09507ae31ca1c524fb625483d  deviceinfo
+"

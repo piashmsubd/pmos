@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-leeco-zl1
+pkgdesc="LeEco Le Pro3"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-leeco-zl1
+	mkbootimg
+	mdss-fb-init-hack
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+e02bc3fa683dc74c15777890bc724f1267faad4f164b7f92b4c962a7953a8fa02666c0d5485827033a596237b8ab7b359d4954d0d3a8e654112da017f0de625d  deviceinfo
+"

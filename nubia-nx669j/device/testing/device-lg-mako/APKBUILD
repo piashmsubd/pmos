@@ -1,0 +1,52 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-lg-mako
+pkgver=7
+pkgrel=0
+pkgdesc="Google Nexus 4"
+url="https://postmarketos.org"
+arch="armv7"
+license="MIT"
+depends="
+	firmware-lg-mako
+	mkbootimg
+	postmarketos-base
+	"
+subpackages="
+	$pkgname-kernel-next:kernel_next
+	$pkgname-kernel-stable:kernel_stable
+	$pkgname-kernel-lts:kernel_lts
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+options="!check !archcheck"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+kernel_next() {
+	pkgdesc="Unstable next kernel (linux-next)"
+	depends="linux-next"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_stable() {
+	pkgdesc="Stable kernel from Alpine Linux (linux-stable)"
+	depends="linux-stable"
+	provides="$pkgname-kernel-edge=$pkgver-r$pkgrel"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_lts() {
+	pkgdesc="Long term support (LTS) kernel from Alpine Linux (linux-lts)"
+	depends="linux-lts"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+sha512sums="
+d3d459c5486fe1ba8a39e0c559e5d6f2ffddbbf34ca24d7a921238786ea868c6c752254e310534176bfb5a7ce8c0a64fe3958d77ec167acd0fd78047e66b08d7  deviceinfo
+"

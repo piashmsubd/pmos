@@ -1,0 +1,35 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-sharp-shl22
+pkgdesc="SHARP SHL22"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	postmarketos-base
+	postmarketos-base-downstream-disable-udev-v4l
+	linux-sharp-shl22
+	mkbootimg
+	msm-fb-refresher
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	initfs-hook.sh
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+d6cc002fd2bfe0e60f4273b793c828429aac54618f693185be03632fbf5918f5dd142a4a265cb1723f19001a29c9db321a86eedcdb3fb86ecf114f04c489630c  deviceinfo
+c983fc8281167bed1de5eec3651d82ed0dea612a4267acc8edf34ac8b1f857a57d5d63c555a373749eef3119cbfc9f4d25a080c0291d5af847642b5f60fcb211  initfs-hook.sh
+"

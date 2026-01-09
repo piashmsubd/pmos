@@ -1,0 +1,69 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/defconfig
+# Maintainer: Aster Boese <asterboese@mailbox.org>
+
+_flavor="postmarketos-apple-4k"
+pkgname=linux-$_flavor
+pkgver=6.16.0
+pkgrel=0
+pkgdesc="Mainline kernel fork for Apple iPhone and iPad devices (4k)"
+arch="aarch64"
+_carch="arm64"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	flex
+	openssl-dev
+	perl
+	linux-headers
+"
+
+# Source
+_repository="HoolockLinux/linux"
+_tag="hoolock-${pkgver%.*}"
+_config="config-$_flavor.$arch"
+source="
+	http://github.com/$_repository/archive/refs/tags/$_tag.tar.gz
+	$_config
+"
+builddir="$srcdir/linux-$_tag"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$arch" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS" \
+		Image.gz dtbs
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+
+	install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+		"$pkgdir/boot/vmlinuz"
+
+	make dtbs_install \
+		ARCH="$_carch" \
+		INSTALL_PATH="$pkgdir"/boot/ \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+7f9a60a57ad165d820f821425614de77b57bd8fc71380f5bf2df9d048b9570f17a4246ead44fbc42a8a597aeea80bd85d5212e5942eed9360ebcb5cfe1f91640  hoolock-6.16.tar.gz
+aabf13d9e2db53e8553e5a12ddde5acc5ecece6ec47b5de17b8ab80ae47c654c2cf45bba1d50fd64a0ffbdbcf568ccd13a093c418901d63b980fcfb06ed7d6bf  config-postmarketos-apple-4k.aarch64
+"

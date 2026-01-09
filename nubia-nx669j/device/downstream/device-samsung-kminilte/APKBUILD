@@ -1,0 +1,41 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-kminilte
+pkgdesc="Samsung Galaxy S5 Mini"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	postmarketos-base
+	postmarketos-base-downstream-disable-udev-v4l
+	linux-samsung-kminilte
+	mkbootimg
+"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="
+	deviceinfo
+	fb.modes
+	"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	install -Dm644 "$srcdir"/fb.modes "$pkgdir"/etc/fb.modes
+}
+
+nonfree_firmware() {
+	pkgdesc="Non-free firmware for Samsung Galaxy S5 Mini"
+	depends="firmware-samsung-kminilte"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+aef3c3c7829e5ae38b70fd1c436ec2403504046beed5d6827f63a2d1274dcc44c2f534671cd8dbf46475eaf218512c37f7ebc83c053d912860a79be285f8de9a  deviceinfo
+245efec73f85ef715c877d6c24eb4b7b677d250bd38167dc19b1b0ed84c3ea91049576adbbf21dd48940c08e40f0294a1a01b0ab3e56efd794109a7e7ebc1104  fb.modes
+"

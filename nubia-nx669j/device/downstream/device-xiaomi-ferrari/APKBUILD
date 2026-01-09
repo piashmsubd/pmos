@@ -1,0 +1,31 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-ferrari
+pkgdesc="Xiaomi Mi 4i"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-xiaomi-ferrari mkbootimg msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+
+}
+nonfree_firmware() {
+	pkgdesc="Proprietary firmware blobs for WIFI, GPU, Touchscreen,etc"
+	depends="firmware-xiaomi-ferrari"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+ff0567f822796398ae63548cb1d144382198d51e6263fa247064a0a7071285ebb310be621f324f6f42bfcbecc517614be738fb88a6c4a002fd2e6f8c946472e4  deviceinfo
+"

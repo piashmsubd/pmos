@@ -1,0 +1,40 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Archived: Downstream port, only for testing. Use mainline port (samsung-j6lte)!
+pkgname=device-samsung-j6lte-downstream
+pkgdesc="Samsung Galaxy J6 (2018)"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-samsung-j6lte-downstream
+	mkbootimg
+	postmarketos-base
+	postmarketos-base-downstream
+	msm-fb-refresher
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="$pkgdesc (WiFi firmware)"
+	depends="firmware-samsung-j6lte-downstream"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+35fff64d4e0b04242626464ef7b63f34b3ce3c236301a75163101bacecb39eceee1b8b99d9d9333b9dfee27d46c076df8edee1fbdd6dafdd5cc2ec9bf085789c  deviceinfo
+"

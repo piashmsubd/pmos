@@ -1,0 +1,28 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-amazon-karnak
+pkgdesc="Amazon Fire HD 8 (2018)"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-amazon-karnak
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+c186f266bd534d5993221c18d1f19ad6f6698ed8c619dedf63bf2e307e2f0428497bd6da0e7b2904ff3bd0207d0312447fcad6b3f18785bce480c9bcc2163646  deviceinfo
+"

@@ -1,0 +1,36 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-sony-suzuran
+pkgdesc="Sony Xperia Z5 Compact"
+pkgver=4
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-sony-suzuran
+	mkbootimg
+	msm-fb-refresher
+	postmarketos-base
+	postmarketos-base-downstream
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	90-android-touch-dev.rules
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	install -D -m644 "$srcdir"/90-android-touch-dev.rules \
+		"$pkgdir"/etc/udev/rules.d/90-android-touch-dev.rules
+}
+
+sha512sums="
+a9b81b60240c36b5225d0e7a10713e8ae404864ebca8e7fdc46bd588f0cf54e83696d72045db8be674bdc3dd72047e2cefb8c8000f8fbac231aeeb4daa070712  deviceinfo
+ad75ee1f07de8a413d98b0a28be58df80bf08b454aad80b265ca86dcb3370ec8f47c1246e4379d036d8f98ae3292b89d74988d6f8bafea100860615feaee17d2  90-android-touch-dev.rules
+"

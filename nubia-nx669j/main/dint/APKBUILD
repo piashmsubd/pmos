@@ -1,0 +1,36 @@
+# Maintainer: Stefan Hansson <newbyte@postmarketos.org>
+pkgname=dint
+pkgver=0.0.4
+pkgrel=0
+pkgdesc="postmarketOS deviceinfo validator, linter, and documentation generator"
+url="https://gitlab.postmarketos.org/postmarketOS/dint"
+arch="all"
+license="EUPL-1.2"
+makedepends="cargo cargo-auditable"
+source="https://gitlab.postmarketos.org/postmarketOS/dint/-/archive/$pkgver/dint-$pkgver.tar.bz2"
+options="!pmb:crossdirect"
+
+prepare() {
+	default_prepare
+
+	cargo fetch --locked
+}
+
+build() {
+	cargo auditable build --release --frozen
+}
+
+check() {
+	cargo test --frozen
+}
+
+package() {
+	install -Dm755 target/release/dint \
+		-t "$pkgdir"/usr/bin
+	install -Dm644 deviceinfo_schema.toml \
+		-t "$pkgdir"/usr/share/dint
+}
+
+sha512sums="
+1cee7f733cec6950ed74b41e155667f6eeb40b1633078eb9d19c6596a0dfbe2503b09ba5255569aa371ab975773323e9cda2dbcd78692fadd7283bb930987fcd  dint-0.0.4.tar.bz2
+"

@@ -1,0 +1,24 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-oneplus-onyx
+pkgdesc="OnePlus X"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-oneplus-onyx mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+66e34abeed4638ce4e0bf5f2906ae992993bc60c15a33d57490df48ab7388b168fd648421a96f7cf06e277c4ea6a4f955fa9a78357e65e7fff1e76eca0c6c981  deviceinfo
+"

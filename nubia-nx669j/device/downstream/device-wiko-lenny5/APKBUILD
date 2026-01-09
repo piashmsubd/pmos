@@ -1,0 +1,28 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-wiko-lenny5
+pkgdesc="Wiko Lenny 5"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-wiko-lenny5
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+0a716c52c494ea1f109e555afe50a46fdf7d80c717220279c3772418b9ac3ad783a14056331c98ace3b4efafcc94c801e339c0fd78587a62509ab58eee8fd9ba  deviceinfo
+"

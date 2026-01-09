@@ -1,0 +1,26 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Newbyte <newbytee@protonmail.com>
+pkgname=device-htc-golfu
+pkgdesc="HTC Desire C"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+# mdss-fb-init-hack: screen stays black on boot without this
+depends="postmarketos-base linux-htc-golfu mkbootimg mdss-fb-init-hack"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+946974ce6942bad15e94a3189e4b8160a49165e468cd446a8224cae769d3b9961ddd077dfce53bbd8ad548e9d40ba6f9c64d74d23758b362e9ae9a0f28dd7ed7  deviceinfo
+"

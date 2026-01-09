@@ -1,0 +1,29 @@
+# Archived: Kernel does not build anymore
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-klipad-rel
+pkgdesc="KLIPAD Klipad Tablet"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-klipad-rel
+	postmarketos-base
+	mkbootimg
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+6d51632faf832e1ad00a60609a749008e0ada21237517c6d87c2ac88b4fb683f3ded8995e718329e4d83bac8fc84833ddefa1a68ef71becd16259e9efb28893f  deviceinfo
+"

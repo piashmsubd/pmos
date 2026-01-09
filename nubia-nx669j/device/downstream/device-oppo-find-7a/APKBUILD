@@ -1,0 +1,32 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-oppo-find-7a
+pkgdesc="OPPO Find 7a"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-oppo-find-7a mkbootimg msm-fb-refresher"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="deviceinfo initfs-hook.sh"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Firmware blobs"
+	depends="firmware-oppo-find-7a"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+99081a8ff20fc9cd61e79700f80d197a78987687133619d2a958d793e2b001075053f75371a3d4529368a1d1d0f08b71b5d3029e09bbded7b7543f7b7b1b82b8  deviceinfo
+fe4ea91d89f4c1f93efed0bbee8b6ddadccaa2bf0623b15fb598758dfe1fa347aaf3d60b4a67e270a1716ffaae98c158ea6d574d0ca2e4895c7ee768c357abdc  initfs-hook.sh
+"

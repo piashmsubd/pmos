@@ -1,0 +1,26 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# COntributor: sir_si <simonutter@gmail.com>
+pkgname=device-htc-evita
+pkgdesc="HTC One XL"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-htc-evita mkbootimg mdss-fb-init-hack"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+3b4b17b33eace65c33c754b34793bea35d65af76cd09ad47e39cd265d332e1c1c87801ad2c3c702e4316ac9f7dac0dbad5bc6a87c1bd85c9439d0d4c49d287b6  deviceinfo
+"

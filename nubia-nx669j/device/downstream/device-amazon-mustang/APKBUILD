@@ -1,0 +1,24 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-amazon-mustang
+pkgdesc="Amazon Fire 7 (2019)"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-amazon-mustang mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+5a00e27a37d45da55e16c86faa8ebb552a5f5d6e0d84230506896cdae7150d2a900867bce1f287ca3b570e1734a4e91b9ba8e82e6827049f89fe1ac1609f5823  deviceinfo
+"

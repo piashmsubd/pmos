@@ -1,0 +1,73 @@
+maintainer="Bart Ribbers <bribbers@disroot.org>"
+pkgname=drkonqi
+pkgver=6.5.4
+pkgrel=0
+pkgdesc="The KDE crash handler"
+# armhf blocked by qt6-qtdeclarative -> ki18n
+# riscv64 blocked by out-of-sync builder in Alpine
+arch="all !armhf !riscv64"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+depends="
+	elfutils
+	gdb
+	kirigami
+	kitemmodels
+	py3-psutil
+	py3-pygdbmi
+	py3-sentry-sdk
+	"
+makedepends="
+	extra-cmake-modules
+	kcompletion-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdeclarative-dev
+	ki18n-dev
+	kidletime-dev
+	kio-dev
+	kjobwidgets-dev
+	knotifications-dev
+	kservice-dev
+	kstatusnotifieritem-dev
+	kuserfeedback-dev
+	kwallet-dev
+	kwidgetsaddons-dev
+	py3-chai
+	qt6-qtbase-dev
+	samurai
+	syntax-highlighting-dev
+	systemd-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/plasma/drkonqi.git"
+source="https://download.kde.org/stable/plasma/$pkgver/drkonqi-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -G Ninja \
+		-DWITH_PYTHON_VENDORING=OFF \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_TESTING=ON
+	cmake --build build
+}
+
+check() {
+	# connectiontest requires a network connection
+	ctest --test-dir build --output-on-failure -E "(connection|preamble)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+e4f56296f63645ac4cc9a3300ae1bbbb46846d0aa1641e77bbae54b209f86d761e8a9ca7c4afe211ec87ad9fd98378e7d14dce78788b1e47eccdba6d9c4c5ba0  drkonqi-6.5.4.tar.xz
+"

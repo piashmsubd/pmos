@@ -1,0 +1,25 @@
+# Archived: Kernel does not build anymore
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-gtel3g
+pkgdesc="Samsung Galaxy Tab E 9.6"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-gtel3g mkbootimg msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+078ac2e32185bede5dffcc5606703a5d6118c9146768a24c5f148f6f527df52877230a4ade85eed7e3794bc1ce0bdfd5d33552639dda35416fbefecaeb803ad5  deviceinfo
+"

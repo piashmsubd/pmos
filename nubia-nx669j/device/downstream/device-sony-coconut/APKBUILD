@@ -1,0 +1,24 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-sony-coconut
+pkgdesc="Live with Walkman"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-sony-coconut mkbootimg msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+9f8646e83d9a5a75e9a5165775e0389750c138852043992b27a3133af948622013c7d555767bd9369f66f54dbd438322b3af8495f8cc443748cad781ed6f44f2  deviceinfo
+"

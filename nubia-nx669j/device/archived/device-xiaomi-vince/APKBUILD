@@ -1,0 +1,39 @@
+# Archived: unmaintained port, only for testing. Use generic/mainline port (qcom-msm8953)
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-vince
+pkgdesc="Xiaomi Redmi 5 Plus"
+pkgver=17
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	firmware-qcom-adreno-a530
+	firmware-xiaomi-vince
+	linux-postmarketos-qcom-msm8953
+	lk2nd-msm8953
+	mkbootimg
+	msm-firmware-loader
+	postmarketos-base
+	soc-qcom-msm8953
+	soc-qcom-msm8953-modem
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+a35f4829ff54c39c37586c2398f6a874c0be84b62ba7b7cb46fe0cde1001ac14dc2b5dea9ff01c4e9e2c2a661e0a501f1cb6b5697ee4234132a865a16db90f48  deviceinfo
+69cfc8db6ea497576085e1b5861c766b5c6cfbd493e4d66aa0bfa29a0e80eeaeb8a465c4841c6a7959796f5a2325e621d60f2c35ccb0741d7934ab310abe807f  modules-initfs
+"

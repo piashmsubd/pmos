@@ -1,0 +1,30 @@
+# Archived: Downstream port, only for testing. Use mainline port!
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-platina-downstream
+pkgdesc="Xiaomi Mi 8 Lite (Downstream)"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-xiaomi-platina-downstream
+	mkbootimg
+	msm-fb-refresher
+	postmarketos-base
+	"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+8c86b4a3b9843e56a19bb0e397ac833060f2a99b54d2229508ce5e778ea43eacfe250e407807115466807944506fc5765d11ea0de31b29d45465b0221fb1271a  deviceinfo
+"

@@ -1,0 +1,30 @@
+# Archived: Kernel sources have disappeared, does not build anymore
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-meizu-mblu2
+pkgdesc="Meizu M2"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-meizu-mblu2
+	mkbootimg
+	msm-fb-refresher
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+7012a8c03b7cce889cafdafc6050e505a1c9f9ebb74c456a366ca782e6f8a613646394a23763070d36be04eca0a759945ad76a93cd7053be6e3ef1cbae566ef3  deviceinfo
+"

@@ -1,0 +1,41 @@
+# Maintainer: Your Name <your@email.com>
+# Reference: https://wiki.postmarketos.org/wiki/Device_categorization
+pkgname=device-nubia-nx669j
+pkgdesc="Nubia RedMagic 6s Pro"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	postmarketos-base
+	linux-nubia-nx669j
+	mkbootimg
+	soc-qcom-sm8350
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Firmware for WiFi, Bluetooth, GPU, etc."
+	depends="
+		firmware-nubia-nx669j
+		linux-firmware-qcom
+		linux-firmware-ath11k
+	"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+SKIP_FOR_NOW  deviceinfo
+"

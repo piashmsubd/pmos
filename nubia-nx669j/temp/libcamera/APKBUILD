@@ -1,0 +1,194 @@
+# Forked from Alpine for temporary downstream patches
+
+pkgname=libcamera
+_pkgver=0.6.0
+pkgver=9999$_pkgver
+pkgrel=0
+pkgdesc="Linux camera framework"
+url="https://libcamera.org/"
+arch="all"
+license="LGPL-2.1-or-later AND GPL-2.0-or-later"
+depends_dev="
+	eudev-dev
+	glib-dev
+	gnutls-dev
+	gst-plugins-bad-dev
+	qt6-qtbase-dev
+	"
+# upstream calls 'date' with a non-POSIX option so we pull in coreutils
+makedepends="$depends_dev
+	coreutils
+	doxygen
+	eudev-dev
+	glib-dev
+	gnutls-dev
+	graphviz
+	gst-plugins-bad-dev
+	gtest-dev
+	libevent-dev
+	libpisp-dev
+	libunwind-dev
+	libyuv-dev
+	linux-headers
+	meson
+	py3-jinja2
+	py3-ply
+	py3-pybind11-dev
+	py3-sphinx
+	py3-sphinxcontrib-doxylink
+	py3-yaml
+	python3-dev
+	qt6-qtbase-dev
+	qt6-qttools-dev
+	yaml-dev
+	"
+subpackages="
+	$pkgname-dbg
+	$pkgname-dev
+	qcam
+	$pkgname-gstreamer
+	$pkgname-v4l2
+	$pkgname-tools
+	py3-$pkgname:py3
+	"
+_tuning_files="
+	hi846.yaml
+	imx355.yaml
+	imx363.yaml
+	imx371.yaml
+	imx376.yaml
+	imx858.yaml
+	s5k3l6xx.yaml
+	s5kjn1.yaml
+	"
+source="https://gitlab.freedesktop.org/camera/libcamera/-/archive/v$_pkgver/libcamera-v$_pkgver.tar.gz
+	0001-libcamera-simple-Enable-softwareISP-for-the-librem5.patch
+	0002-libcamera-simple-Force-disable-softwareISP-for-milli.patch
+	0003-libcamera-simple-Enable-softISP-for-the-Pinephone.patch
+	0004-libcamera-simple-Skip-hwISP-formats-if-swISP-is-acti.patch
+	qcam.desktop
+	$_tuning_files
+	"
+builddir="$srcdir/$pkgname-v$_pkgver"
+# gstreamer tests fail
+# manual strip because ipa .sign files depend on the file contents- have to re-sign after strip
+options="!strip !check"
+
+case "$CARCH" in
+arm*|aarch64)
+	subpackages="$subpackages $pkgname-raspberrypi"
+	;;
+esac
+
+case "$CARCH" in
+ppc64le|s390x|riscv64|loongarch64)
+	# doesn't install any ipa
+	;;
+*)
+	depends="$pkgname-ipa=$pkgver-r$pkgrel"
+	subpackages="$subpackages $pkgname-ipa"
+	;;
+esac
+
+build() {
+	abuild-meson \
+		-Dv4l2=true \
+		-Dwerror=false \
+		-Ddocumentation=disabled \
+		. output
+	meson compile -C output
+}
+
+check() {
+	meson test -C output --print-errorlogs
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+	install -Dm644 -t "$pkgdir"/usr/share/applications "$srcdir"/qcam.desktop
+
+	# manual strip first..
+	scanelf --recursive \
+		--nobanner \
+		--etype "ET_DYN,ET_EXEC" \
+		--format "%F" \
+		"$pkgdir" \
+		| while read -r file; do
+			strip "$file"
+	done
+}
+
+ipa() {
+	depends=""
+	amove usr/lib/libcamera
+	amove usr/share/libcamera/ipa
+
+	for _tuning_file in $_tuning_files; do
+		install -Dm644 -t "$subpkgdir"/usr/share/libcamera/ipa/simple \
+			"$srcdir"/"$_tuning_file"
+	done
+
+	# then sign ipa's
+	local ipa
+	for ipa in "$subpkgdir"/usr/lib/libcamera/ipa/ipa*.so; do
+		msg "signing $ipa"
+		"$builddir"/src/ipa/ipa-sign.sh \
+			"$(find "$builddir"/output -type f -iname "*ipa-priv-key.pem")" \
+			"$ipa" \
+			"$ipa".sign
+	done
+}
+
+qcam() {
+	depends=""
+	amove usr/bin/qcam
+
+	amove usr/share/applications/qcam.desktop
+}
+
+gstreamer() {
+	depends=""
+	amove usr/lib/gstreamer-1.0
+}
+
+v4l2() {
+	depends=""
+	amove usr/libexec/libcamera/v4l2-compat.so
+}
+
+raspberrypi() {
+	depends=""
+	amove usr/share/libcamera/ipa/rpi
+	amove usr/libexec/libcamera/raspberrypi_ipa_proxy
+	amove usr/share/libcamera/pipeline/rpi/vc4
+}
+
+tools() {
+	depends=""
+	amove usr/bin/cam
+	amove usr/bin/lc-compliance
+}
+
+py3() {
+	pkgdesc="$pkgname (python bindings)"
+	depends="python3"
+
+	amove usr/lib/python*
+}
+
+sha512sums="
+901debb8fe864ab5b7b9a9011c760165e0a94f9c14bb6654e297161aaadb6ed1929f1cf4fe20357c188bf24bd00db3953ddd257a0ac726973ad3ceeea07d959f  libcamera-v0.6.0.tar.gz
+b6e4d79bb3e206bec84804100033bec80d0c3a2408d5d0643c5c52c658b2a3ff2eb4bf4df0d1c21b91b510eecdeb59af826d324c64fcc481790952836cca2ea8  0001-libcamera-simple-Enable-softwareISP-for-the-librem5.patch
+82b1e5278f571ff734bce80ded4395ac18191ea2ba94c7cb4f3d0bf5b1ff96e142a419ee6edec395e1af50fc131959b7c3bb963734bd0e573e3c197d00e99493  0002-libcamera-simple-Force-disable-softwareISP-for-milli.patch
+7b9e97b1cc866cd0ad6e52c7980ebe5561d3e9a092912602cc85ff502cee5d69b6487ef16419a248a720617be3f1817aa92f8f15992869b87af5c02859fa6aa6  0003-libcamera-simple-Enable-softISP-for-the-Pinephone.patch
+48de0e1e1acefb0a901dcfc4c266d633e73463f3ce2a89d7b83eed4833f6459abdc98528afe96d88c7bac78e75035a491f9228ed937e251849e9926e7d80216d  0004-libcamera-simple-Skip-hwISP-formats-if-swISP-is-acti.patch
+22167a4eceb6d1b40b0b7c45fdf116c71684f5340de7f767535cb8e160ad9d2ae0f00cb3d461f73a344520a48a4641cf46226841d78bee06bfbfd2a91337f754  qcam.desktop
+fa9e4736c7651d4f97d97b58eef2d1d7ddd4616b1de67c840c4804585c62c78bb5ce80cb14669ae462414faa1c6af10c60cad0c416d69f685bc96434ad73e08a  hi846.yaml
+fa9e4736c7651d4f97d97b58eef2d1d7ddd4616b1de67c840c4804585c62c78bb5ce80cb14669ae462414faa1c6af10c60cad0c416d69f685bc96434ad73e08a  imx355.yaml
+fa9e4736c7651d4f97d97b58eef2d1d7ddd4616b1de67c840c4804585c62c78bb5ce80cb14669ae462414faa1c6af10c60cad0c416d69f685bc96434ad73e08a  imx363.yaml
+fa9e4736c7651d4f97d97b58eef2d1d7ddd4616b1de67c840c4804585c62c78bb5ce80cb14669ae462414faa1c6af10c60cad0c416d69f685bc96434ad73e08a  imx371.yaml
+fa9e4736c7651d4f97d97b58eef2d1d7ddd4616b1de67c840c4804585c62c78bb5ce80cb14669ae462414faa1c6af10c60cad0c416d69f685bc96434ad73e08a  imx376.yaml
+fa9e4736c7651d4f97d97b58eef2d1d7ddd4616b1de67c840c4804585c62c78bb5ce80cb14669ae462414faa1c6af10c60cad0c416d69f685bc96434ad73e08a  imx858.yaml
+fa9e4736c7651d4f97d97b58eef2d1d7ddd4616b1de67c840c4804585c62c78bb5ce80cb14669ae462414faa1c6af10c60cad0c416d69f685bc96434ad73e08a  s5k3l6xx.yaml
+fa9e4736c7651d4f97d97b58eef2d1d7ddd4616b1de67c840c4804585c62c78bb5ce80cb14669ae462414faa1c6af10c60cad0c416d69f685bc96434ad73e08a  s5kjn1.yaml
+"

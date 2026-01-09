@@ -1,0 +1,24 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-bq-chaozu
+pkgdesc="Aquaris U"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armhf"
+options="!check !archcheck"
+depends="postmarketos-base linux-bq-chaozu mkbootimg msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+7b2bad583ac330308ccaeedc782440041889ea05c761ca3d36245bb72b2350cfb9654d9e29d90cf6daef95086f6af5b9ac9329b9c46986cbea93fcc037ab51da  deviceinfo
+"

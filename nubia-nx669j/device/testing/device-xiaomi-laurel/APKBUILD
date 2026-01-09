@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Lux Aliaga <they@mint.lgbt>
+pkgname=device-xiaomi-laurel
+pkgdesc="Xiaomi Mi A3"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-qcom-sm6125
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+124a5544d38f85caa264612caa48515ee4f60663b64b045fffd02dc7f5c18682f58e077870a99580322728e11972266f717cafb3d213b4719a7a5653168614e3  deviceinfo
+"

@@ -1,0 +1,95 @@
+# Maintainer: Your Name <your@email.com>
+# Kernel for Nubia RedMagic 6s Pro (NX669J)
+# Based on MSM-5.4 kernel from Nubia
+
+_flavor="nubia-nx669j"
+pkgname=linux-$_flavor
+pkgver=5.4
+pkgrel=0
+pkgdesc="Nubia RedMagic 6s Pro kernel"
+arch="aarch64"
+_carch="arm64"
+url="https://github.com/nicokarg/NX669J-kernel"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	findutils
+	flex
+	linux-headers
+	openssl-dev
+	perl
+	python3
+	clang
+	llvm
+	lld
+	xz
+"
+
+# Source: your local kernel, adjust as needed
+_repository="NX669J-kernel"
+_commit="msm-5.4"
+_config="config-$_flavor.$arch"
+source="
+	$_commit.tar.gz
+	$_config
+	dtb-concat.sh
+"
+builddir="$srcdir/msm-5.4"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/$_config" "$builddir"/.config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC=clang \
+		HOSTCC=clang \
+		LD=ld.lld \
+		AR=llvm-ar \
+		NM=llvm-nm \
+		OBJCOPY=llvm-objcopy \
+		OBJDUMP=llvm-objdump \
+		STRIP=llvm-strip \
+		CROSS_COMPILE=aarch64-linux-gnu- \
+		olddefconfig
+	make ARCH="$_carch" CC=clang \
+		HOSTCC=clang \
+		LD=ld.lld \
+		AR=llvm-ar \
+		NM=llvm-nm \
+		OBJCOPY=llvm-objcopy \
+		OBJDUMP=llvm-objdump \
+		STRIP=llvm-strip \
+		CROSS_COMPILE=aarch64-linux-gnu- \
+		-j$(nproc)
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	
+	install -Dm644 "$builddir/arch/$_carch/boot/Image" \
+		"$pkgdir/boot/vmlinuz"
+	
+	make modules_install \
+		ARCH="$_carch" \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+b1e45674b8d9dee2d25b6620b0b1f7aa3d478c76f55a462e8168c9bbb85057e552345b5dbccbbb29aebd2b8afda5d65e969b2ec655ba49cbaffc1c3a4b642efa  msm-5.4.tar.gz
+7c8a77ded810e07999c9dea88b566a9d7e37dfdecf3253c8595c3629f47c9a10467742c9679cc0bfcb8db1afd0842ef2618c44880c0d15ee7eaf36a308a3cf79  config-nubia-nx669j.aarch64
+47b251f271488e582f41b3bb8d0b4a83b007adfb558834522a08584ce609308afe5dba172ddb97feb5be04584f7178f363dfd3ca98eadbebd4e484170139a7b9  dtb-concat.sh
+"

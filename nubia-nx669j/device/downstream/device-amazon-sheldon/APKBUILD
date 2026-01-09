@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Eli Hersha <elihersha@gmail.com>
+pkgname=device-amazon-sheldon
+pkgdesc="Amazon Fire TV Stick Lite"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-amazon-sheldon
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+67ccad0d356ac55b40444bad964bf1894f582048d6c59cc96f557ec16bec62f2d08be88f1d5e20147b1eef26c541d53190c97d4ae31e05f709e84217e556ce6f  deviceinfo
+"

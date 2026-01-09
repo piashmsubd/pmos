@@ -1,0 +1,32 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-serranolte
+pkgdesc="Samsung Galaxy S4 Mini"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-serranolte mkbootimg"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Firmware for Modem and WiFi"
+	# Non-firmware packages placed here, because they aren't useful without firmware
+	depends="firmware-samsung-serranolte-modem firmware-samsung-serranolte-wlan msm-modem-downstream"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+2a2211ee863978e75264c31c4c1282eac2e7aa9d617501169fbb217d79a39b93d0347b983bbad701eae84e397a73c75e76968bee6096b27794d8e69fe7a9ae28  deviceinfo
+"

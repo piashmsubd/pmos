@@ -1,0 +1,27 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-finepower-f1
+pkgdesc="FinePower F1"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-finepower-f1 mkbootimg alsa-utils soc-sprd-audio-sc8830 reboot-mode"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+69af30c256c9764cea9f79a5533ab5502f4edadc26710f0066bc13610659f90ec1f4f1297863743156773da4923f2fb3d05971f4036f97f3d7840f4ad1c034fe  deviceinfo
+"

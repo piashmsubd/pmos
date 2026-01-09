@@ -1,0 +1,25 @@
+# Archived: Downstream port, only for testing. Use mainline port!
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-begonia-downstream
+pkgdesc="Xiaomi Redmi Note 8 Pro (Downstream)"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-xiaomi-begonia-downstream mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+a0ec18dc1b613f53721a8a4b9b94bb3bf83cde15112a51f69629e3d80918c9de25545fd29fec9c2fe19b123ef4f920762decbfb2120e050ee6972cb66e6bee14  deviceinfo
+"

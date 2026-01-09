@@ -1,0 +1,38 @@
+# Maintainer: Achill Gilgenast <achill@achill.org>
+pkgname=gnome-logs
+pkgver=49.0
+pkgrel=0
+pkgdesc="Log viewer for the systemd journal"
+url="https://apps.gnome.org/Logs"
+# armhf: pmb#2618
+arch="all !armhf"
+license="GPL-3.0-or-later"
+makedepends="
+	desktop-file-utils
+	gtk4.0-dev
+	itstool
+	libadwaita-dev
+	meson
+	systemd-dev
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+source="https://download.gnome.org/sources/gnome-logs/${pkgver%.*}/gnome-logs-$pkgver.tar.xz"
+
+build() {
+	abuild-meson \
+		-Dman=true \
+		output .
+	meson compile -C output
+}
+
+check() {
+	meson test --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+3151890e77f1c2e80ac830f8a58d60f8f766c62b8693b3671e53373d528c1465366413985b820c82b3460bd8ca1d1205053a75ccba6d36e96933f794e96f5418  gnome-logs-49.0.tar.xz
+"

@@ -1,0 +1,51 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Mis012 <Michael.Srba@seznam.cz>
+# Co-Maintainer: Nikita Travkin <nikita@trvn.ru>
+# Co-Maintainer: Minecrell <minecrell@minecrell.net>
+pkgname=device-samsung-a3
+pkgdesc="Samsung Galaxy A3 (2015)"
+pkgver=16
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916
+	 soc-qcom-msm8916 soc-qcom-msm8916-rproc soc-samsung-msm8916-modem-workaround"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+"
+
+# Backwards compatibility for old device package names + kernel variants
+_substitutes="device-samsung-a3lte device-samsung-a3ulte"
+replaces="$_substitutes $pkgname-kernel-mainline $pkgname-kernel-mainline-modem"
+for pkg in $_substitutes; do replaces="$replaces $pkg-kernel-mainline $pkg-kernel-mainline-modem"; done
+for pkg in $replaces; do provides="$provides $pkg=$pkgver-r$pkgrel"; done
+for pkg in $pkgname $_substitutes; do provides="$provides $pkg-phosh=$pkgver-r$pkgrel"; done
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="GPU/WiFi/BT/Modem/Video firmware"
+	depends="firmware-qcom-adreno-a300 msm-firmware-loader firmware-samsung-a3-wcnss-nv"
+	replaces=""
+	for pkg in $_substitutes; do replaces="$replaces $pkg-nonfree-firmware"; done
+	for pkg in $replaces; do provides="$provides $pkg=$pkgver-r$pkgrel"; done
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+b611d82cc3ee9c0e42690edd42341b9578b1d841a92964eb5912a4267b5a7357279ea07479572264fbe7a4286b87474b65e9747359607a9e95d1f0749ff1cb89  deviceinfo
+3754688b2a61c204f37944d700b6fc273f68a01e25d444a3c3f2dd2531d8538650a2e571657e18e7a96a2db96b19f2f738d6f465bde477efd66ab31a78edfb91  modules-initfs
+"

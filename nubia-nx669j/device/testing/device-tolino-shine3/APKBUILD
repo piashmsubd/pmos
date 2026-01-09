@@ -1,0 +1,35 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-tolino-shine3
+pkgdesc="Tolino Shine 3"
+pkgver=4
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	kobo-epdc-extractor
+	linux-postmarketos-imx-ereader
+	perl
+	postmarketos-base
+	u-boot-tolino-shine3
+"
+makedepends="devicepkg-dev"
+
+source="
+	deviceinfo
+	modules-initfs
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+b13476dbe4d6a480e54fd2c53e342e8d191babb43609f1ce5c730080be143b658d9571cc1e49d7ec52455d9f273cb173c8e06c8a816528456fcae7070aa7c4bf  deviceinfo
+5d53ee902538e53c4fe79eaef8e3800b9d3f73ec70d2a9887ddb11a6715ca76ce17128e3c02c2b6f2f575fb86f15c2415c24466d4b1a031f7a346d0db186dcb1  modules-initfs
+"

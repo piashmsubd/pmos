@@ -1,0 +1,26 @@
+# Archived: Downstream port, only for testing. Use mainline port (asus-x00td)!
+# This kernel is mostly used for bringing up new features on mainline, thus unmaintained
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-asus-x00td-downstream
+pkgdesc="Asus Zenfone Max Pro M1 downstream"
+pkgver=2
+pkgrel=0
+url="postmarketos.org"
+arch="aarch64"
+license="MIT"
+options="!check !archcheck"
+depends="linux-asus-x00td-downstream mkbootimg msm-fb-refresher postmarketos-base"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+aacace112d10033fc2a0e1fa5705e2734961a6282833da0277e2fec6662eb4142eb797979b648466d5f1fa31c4d296c3b7f74df473dfbb9927cd3fb34b2491dd  deviceinfo
+"

@@ -1,0 +1,33 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: hexaheximal <hexaheximal@proton.me>
+pkgname=device-odroid-c4
+pkgdesc="ODROID C4"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base u-boot-amlogic-odroid-c4 soc-amlogic-aarch64 linux-postmarketos-amlogic"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="deviceinfo modules-initfs"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="ODROID C4 firmware"
+	depends="linux-firmware-meson"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+cc45d3cf1ba5abc1b3195932fbcef4a90ab10d318f7a4ae0036823ec2fc281c5c681b4c4237a264894554d4ba9d76fa9cdafded882e6b6f00f6c537739bbcc86  deviceinfo
+b9f3e1902c17909de928c99868265a257ba5873f6ea6aa1097ad10721f59d68342d50ee51992472ecd23722f7664a13dd15f4e26071a40595c7c3e5161e533d7  modules-initfs
+"

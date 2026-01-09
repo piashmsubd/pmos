@@ -1,0 +1,27 @@
+# Archived: Kernel sources have disappeared, does not build anymore
+# Maintainer: Hadi Charara <hadicharara@ymail.com>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-amazon-suez
+pkgdesc="Amazon Fire HD 10"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-amazon-suez mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+91b9a695bbf1bf322a072041bf02adc5b9d182fd381b27b5847f82d6b55189abec68281952072b7368491fc549e4f557a82db96942fc1d4b7977e256e0f38f83  deviceinfo
+"

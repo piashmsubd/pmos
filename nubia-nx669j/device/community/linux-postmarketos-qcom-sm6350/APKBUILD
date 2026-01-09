@@ -1,0 +1,71 @@
+# Maintainer: Luca Weiss <luca@lucaweiss.eu>
+
+_flavor="postmarketos-qcom-sm6350"
+pkgname=linux-$_flavor
+pkgver=6.17.6
+pkgrel=2
+pkgdesc="Mainline Kernel fork for SM6350/SM7225 devices"
+arch="aarch64"
+_carch="arm64"
+url="https://github.com/sm6350-mainline/linux"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+	"
+makedepends="
+	bison
+	clang
+	findutils
+	flex
+	installkernel
+	lld
+	llvm
+	openssl-dev
+	perl
+	python3
+"
+
+_repo="linux"
+_config="config-$_flavor.$arch"
+_tag="v$pkgver-sm6350"
+
+# Source
+source="
+	https://github.com/sm6350-mainline/$_repo/archive/$_tag/$_repo-$_tag.tar.gz
+	$_config
+"
+builddir="$srcdir/$_repo-$pkgver-sm6350"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$arch" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" LLVM=1 \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+}
+
+package() {
+	install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+		"$pkgdir/boot/vmlinuz"
+
+	make modules_install dtbs_install \
+		ARCH="$_carch" \
+		LLVM=1 \
+		INSTALL_PATH="$pkgdir"/boot/ \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+8b6418ef520cb789b7f8c4aa3d1cedeab087e104198bb5569541348b173ad1509db561e126ff86e650624b1693e618389ab8abf40e0a1af79e89b5b4b026c9f1  linux-v6.17.6-sm6350.tar.gz
+84b7c27a09d7194fc2d26d4fe72351ed2a91bed6a7c54f88394d1f014d61379d3cc0b26174cf20642f29c17d323006f956923357b675e0f2b9aa11c8b4cccc85  config-postmarketos-qcom-sm6350.aarch64
+"

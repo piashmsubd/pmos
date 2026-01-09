@@ -1,0 +1,109 @@
+# Contributor: Jakub Panek <me@panekj.dev>
+# Maintainer: Casey Connolly <kcxt@postmarketos.org>
+# Co-Maintainer: jane400 <jane400@postmarketos.org>
+# Co-Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
+
+pkgname=systemd-stage0
+pkgver=259
+_pkgver="${pkgver/_/-}"
+pkgrel=1
+pkgdesc="Minimal systemd bootstrap package"
+url="https://github.com/systemd/systemd"
+# armhf: pmb#2618
+arch="all !armhf"
+license="MIT AND GPL-2.0-only AND LGPL-2.1-or-later"
+
+# This is only for bootstrapping other packages, make sure it does not get
+# pulled into real installations via !postmarketos-base and !tracedeps
+depends="!postmarketos-base"
+depends_libs="!postmarketos-base"
+depends_dev="!postmarketos-base"
+depends_doc="!postmarketos-base"
+options="!tracedeps !check pmb:cross-native2 pmb:strict"
+subpackages="$pkgname-doc $pkgname-dev $pkgname-libs"
+
+makedepends_build="
+	meson
+	coreutils
+	gperf
+	py3-jinja2
+	bash
+"
+# Use dbus-dev from Alpine
+makedepends_host="
+	dbus-dev<9990
+	libblkid
+	libcap
+	libcap-dev
+	libintl
+	musl-libintl
+	util-linux
+	util-linux-dev
+"
+
+# When building systemd, this will be installed at the same time as eudev-libs
+# or systemd-udevd (depending on if systemd was already built previously).
+# Let usr/lib/libudev.so.1 from systemd-stage0 be the file that gets used
+replaces="eudev-libs systemd-udevd"
+
+source="systemd-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz"
+builddir="$srcdir/systemd-$_pkgver"
+
+build() {
+	# NOTE: tests=true to work around https://github.com/systemd/systemd/issues/39984
+	abuild-meson \
+		-Dtests=true \
+		-Ddbuspolicydir=/usr/share/dbus-1/system.d \
+		-Ddbussessionservicedir=/usr/share/dbus-1/services \
+		-Ddbussystemservicedir=/usr/share/dbus-1/system-services \
+		-Dbashcompletiondir=no \
+		-Dzshcompletiondir=no \
+		\
+		-Dmode=release \
+		-Dsplit-bin=true \
+		-Dlibc=musl \
+		\
+		-Dkmod-path=/bin/kmod \
+		-Dsulogin-path=/sbin/sulogin \
+		\
+		-Dwheel-group=true \
+		-Ddebug-shell=/bin/ash \
+		\
+		-Dbootloader=disabled \
+		-Dutmp=false \
+		-Dldconfig=false \
+		-Duserdb=false \
+		-Dhomed=disabled \
+		-Dnss-myhostname=false \
+		-Dnss-mymachines=disabled \
+		-Dnss-resolve=disabled \
+		-Dnss-systemd=false \
+		-Dsysext=true \
+		-Dsysusers=true \
+		-Dselinux=disabled \
+		\
+		-Dsystem-alloc-uid-min=101 \
+		-Dsystem-alloc-gid-min=101 \
+		-Dsystem-uid-max=999 \
+		-Dsystem-gid-max=999 \
+		-Dwheel-group=true \
+		-Dnobody-user=nobody \
+		-Dnobody-group=nobody \
+		\
+		-Ddefault-kill-user-processes=true \
+		-Dgshadow=false \
+		-Ddefault-locale=en_US.UTF-8 \
+		\
+		-Didn=false \
+		-Dsysvinit-path="" \
+		build .
+	meson compile ${JOBS:+-j ${JOBS}} -C build
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C build
+}
+
+sha512sums="
+ef46b13661df43e3cfbeee1bc22f0b1eb902e8ebe39c19868c465efd08b35a199c2a2cd9d8021a6bc4d692fa0c6e0eab3f13eecd6ce24dde81d3945464a25b50  systemd-259.tar.gz
+"

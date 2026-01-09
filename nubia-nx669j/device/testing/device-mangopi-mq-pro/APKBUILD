@@ -1,0 +1,63 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: exkc <exxxxkc@getgoogleoff.me>
+pkgname=device-mangopi-mq-pro
+pkgdesc="MangoPi MQ-Pro"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="riscv64"
+# pmb:strict: avoid grub-related install error during build with pmbootstrap
+options="!check !archcheck pmb:strict"
+depends="
+	linux-postmarketos-allwinner-d1
+	postmarketos-base
+	u-boot-mangopi-mq-pro
+"
+makedepends="
+	devicepkg-dev
+	grub
+	grub-efi
+	"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+
+	grub-mkimage \
+		--prefix="/grub" \
+		--output="bootriscv64.efi" \
+		--format="riscv64-efi" \
+		--compression="xz" \
+		\
+		all_video \
+		cat \
+		configfile \
+		disk \
+		echo \
+		efi_gop \
+		fat \
+		ext2 \
+		gzio \
+		help \
+		iso9660 \
+		linux \
+		ls \
+		normal \
+		part_gpt \
+		part_msdos \
+		search \
+		search_label \
+		test \
+		true
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	install -Dm644 bootriscv64.efi \
+		"$pkgdir"/boot/efi/boot/bootriscv64.efi
+	}
+
+sha512sums="
+8fb9ce2f9e744764b2df28243a767acfef5e28c5cb42549374999c0c881f5058abe2cb2c5fde5a56265fbe0f1122b91e0a43923be388faa7c60de37520f75bd9  deviceinfo
+"

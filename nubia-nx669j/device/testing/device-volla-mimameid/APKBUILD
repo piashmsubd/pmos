@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer:
+pkgname=device-volla-mimameid
+pkgdesc="Volla Phone 22"
+pkgver=4
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-mediatek-mt6768
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+2275abd011cee581da0c3a2b73720902c16f4ba3f17ff5ca4a665eb1f9f9fd119d85233880a8e8c352d9b8a06d4876a11e2f7a83685c9b6d4d471136f8e476aa  deviceinfo
+"

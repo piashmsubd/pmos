@@ -1,0 +1,33 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Luca Weiss <luca@lucaweiss.eu>
+pkgname=device-asus-sparrow
+pkgdesc="ASUS ZenWatch 2"
+pkgver=5
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	firmware-asus-sparrow-adsp
+	firmware-asus-sparrow-wifi
+	linux-postmarketos-qcom-msm8226
+	lk2nd-msm8226
+	mkbootimg
+	postmarketos-base
+	soc-qcom-msm8226
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+c35667589a5ff77c5138f32eb383730ade3c2dbb06d5f5564df7a8160715bd359fff2867a52df73772726362fb641ff18636b3c8f6041e2c6de4c59f3894708f  deviceinfo
+"

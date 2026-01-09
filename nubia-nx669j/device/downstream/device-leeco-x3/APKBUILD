@@ -1,0 +1,24 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-leeco-x3
+pkgdesc="LeEco Le 1s"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-leeco-x3 mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+ce330e4dae8c50a59d7bcb080df820b0310f620e8425188a1b60eaa1e381829d285c514f22b6edb1313a0cbd7da1ee7d6af49483f2b5eb9ec67e70bee219e1ca  deviceinfo
+"

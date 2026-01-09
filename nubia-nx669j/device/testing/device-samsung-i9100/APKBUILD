@@ -1,0 +1,48 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-i9100
+pkgver=14
+pkgrel=0
+pkgdesc="Samsung Galaxy SII"
+url="https://postmarketos.org"
+arch="armv7"
+license="MIT"
+depends="
+	firmware-samsung-i9100
+	firmware-samsung-s5k5baf
+	libsamsung-ipc
+	linux-firmware-s5p-mfc
+	linux-postmarketos-exynos4
+	mesa-egl
+	postmarketos-base
+	u-boot-samsung-i9100>=2025.07
+	v4l-utils
+	"
+makedepends="devicepkg-dev"
+install="$pkgname.post-install"
+options="!check !archcheck"
+subpackages="
+	$pkgname-openrc:openrc
+"
+source="
+	deviceinfo
+	media-pipeline.initd
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+openrc() {
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	install="$subpkgname.post-install"
+	install -Dm755 "$srcdir"/media-pipeline.initd "$subpkgdir"/etc/init.d/media-pipeline
+}
+
+sha512sums="
+2dc0d2d98a687a9e5f7211231d04c777c6c437008042f88c36a88be1107e55e9991881a947b29f8354752b8f4858f7c091c40bb66790aea34a48467fd280ebcc  deviceinfo
+d3f06476be583f095189557e5269866cfc9346ddbf8d78267d7562fad7f5eca6b09b81fd08cd9690ecf88105bafe8f3ebd9136b68ab5cdaa8bfff740a8bdf3d2  media-pipeline.initd
+"

@@ -1,0 +1,122 @@
+# Maintainer: Casey Connolly <kcxt@postmarketos.org>
+# Co-Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=postmarketos-initramfs
+pkgver=3.8.11
+pkgrel=0
+pkgdesc="Base files for the postmarketOS initramfs / initramfs-extra"
+url="https://postmarketos.org"
+options="!check"  # no tests
+provides="postmarketos-ramdisk=$pkgver-r$pkgrel"
+provider_priority=10
+makedepends="
+	postmarketos-base-nofde
+"
+depends="
+	blkid
+	btrfs-progs
+	buffyboard
+	busybox-extras
+	bzip2
+	cryptsetup
+	device-mapper
+	devicepkg-utils>=0.2.0
+	dosfstools
+	e2fsprogs
+	e2fsprogs-extra
+	f2fs-tools
+	font-terminus
+	iskey
+	kmod
+	libinput-libs
+	lz4
+	multipath-tools
+	parted
+	postmarketos-fde-unlocker
+	postmarketos-mkinitfs>=2.2
+	udev
+	unudhcpd
+	util-linux-misc
+	xfsprogs
+	xfsprogs-extra
+	xz
+	"
+makedepends="
+	postmarketos-base-nofde
+"
+source="
+	00-default.modules
+	00-initramfs-base.dirs
+	00-initramfs-base.files
+	00-initramfs-extra-base.files
+	init.sh
+	init_functions.sh
+	init_2nd.sh
+	init_functions_2nd.sh
+	mdev.conf
+	unudhcpd.conf
+	"
+arch="noarch"
+license="GPL-2.0-or-later"
+
+build() {
+	mkdir -p "$builddir"
+
+	# Replace <<INITRAMFS_PKG_VERSION>> with the actual version
+	sed "s|<<INITRAMFS_PKG_VERSION>>|$pkgver-r$pkgrel|" \
+		"$srcdir/init.sh" > "$builddir/init.sh"
+}
+
+package() {
+	install -Dm644 "$srcdir/unudhcpd.conf" \
+		"$pkgdir/etc/unudhcpd.conf"
+
+	install -Dm644 "$srcdir"/mdev.conf \
+		-t "$pkgdir"/usr/share/initramfs/
+
+
+	install -Dm644 "$srcdir/init_functions.sh" \
+		"$pkgdir/usr/share/initramfs/init_functions.sh"
+
+	install -Dm644 "$srcdir/init_functions_2nd.sh" \
+		"$pkgdir/usr/share/initramfs/init_functions_2nd.sh"
+
+	install -Dm755 "$builddir/init.sh" \
+		"$pkgdir/usr/share/initramfs/init.sh"
+
+	install -Dm755 "$srcdir/init_2nd.sh" \
+		"$pkgdir/usr/share/initramfs/init_2nd.sh"
+
+	install -Dm644 "$srcdir"/00-initramfs-base.dirs \
+		-t "$pkgdir"/usr/share/mkinitfs/dirs/
+	mkdir -p "$pkgdir"/etc/mkinitfs/dirs
+
+	install -Dm644 "$srcdir"/00-default.modules \
+		-t "$pkgdir"/usr/share/mkinitfs/modules/
+	mkdir -p "$pkgdir"/etc/mkinitfs/modules
+
+	install -Dm644 "$srcdir"/00-initramfs-base.files \
+		-t "$pkgdir"/usr/share/mkinitfs/files/
+	mkdir -p "$pkgdir"/etc/mkinitfs/files
+
+	install -Dm644 "$srcdir"/00-initramfs-extra-base.files \
+		-t "$pkgdir"/usr/share/mkinitfs/files-extra/
+	mkdir -p "$pkgdir"/etc/mkinitfs/files-extra
+
+	mkdir -p "$pkgdir"/usr/share/mkinitfs/hooks
+	mkdir -p "$pkgdir"/usr/share/mkinitfs/hooks-extra
+	mkdir -p "$pkgdir"/etc/mkinitfs/hooks
+	mkdir -p "$pkgdir"/etc/mkinitfs/hooks-extra
+}
+
+sha512sums="
+9d1358886fc2d3eac27c13b11e998458da41ac222c1bfa986ae948970419775b5488ab8b8404a6aa0e21c47717316aa9717b5d5ddc53ec610ad875328ea18e9f  00-default.modules
+9c0e8f6f61d5da191e03a1aa9d5d0ceb5baf1eae6dbb9bfb0af59817783525119ac8394b135f303f7b6434a3eab0b49185fb90379e06823db847a4999c75ce33  00-initramfs-base.dirs
+e268094cbd25e063fdab2226f8cf93885bd8b90455991a53296231a3401a03669440333025ca44b2a8459df98787a5725f7b227ccb9750f8fcad17ef58ba21a1  00-initramfs-base.files
+1bb1930cb5bdb60a074195f772dc015b827487a3efd0d68b51ade52164b6371a756249753fbbdc56e975d18f24ada6a1339ea204d2d8fe7ecd95d7aec8647161  00-initramfs-extra-base.files
+e90596540805662211bd2a2e427ce7cc38f6a30023267f902e23f2bae136b6cd8f4f4716b8fb611be9d671a964edd2ecce03fa32bc8024e29b8375b0097fde0c  init.sh
+05d1ec265f6ca5c4073e0f985729905fdd8f8e11d64bd099f7c50f172827614dd43193399e04d5405edf20248223494b884319d3cc866a32033fb5c313c6e226  init_functions.sh
+6b4881f9b43c90ebcc70d7b7a192d26a2e3ce01c43b8536fe900c2ffaf74ef035803b9aa083e7a9d5c49c75be8ba6ff22997a037ae4f399e6ee5e1978c4b3f9c  init_2nd.sh
+de14f6f678856ae316f28c003a6293a383aa6b7cbb19951b981430eb0e3b91d0634dedf62d29d105845b6e172daa18e6b6e45e03342d72ae806ca611a1236d18  init_functions_2nd.sh
+675e7d5bee39b2df7d322117f8dcaccc274d61beaf4d50ead19bbf2109446d64b1c0aa0c5b4f9846eb6c1c403418f28f6364eff4537ba41120fbfcbc484b7da7  mdev.conf
+ba3275a9af788c7c782322a22a0f144d5e50e3498ea6886486a29331f23ae89cd32d500a3635cfa7cab369afba92edc18aeca64ccbf0cd589061cce23d15b46c  unudhcpd.conf
+"

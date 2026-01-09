@@ -1,0 +1,33 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-barnesnoble-encore
+pkgdesc="Barnes & Noble Nook Color"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-omap
+	postmarketos-base
+	u-boot-tools
+"
+_pmb_recommends="linux-firmware-ti-connectivity"
+makedepends="devicepkg-dev u-boot-tools"
+source="
+	deviceinfo
+	modules-initfs
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+fd7da0d2862fa8c335e67afa5f55a7f11d4008c903d290c9503de11d07ad69b70e41a955c1a114d31321f7287d98326329867797054c6c6050140755e3ae128b  deviceinfo
+0491da0e90890b7884c8af5e5a8b3541a6aa298e7980c3179e4eb193f2f22767add0811bb7abb00abab7faa74bf35e1243b97e308fb1005c9e26d3aef99da3a2  modules-initfs
+"

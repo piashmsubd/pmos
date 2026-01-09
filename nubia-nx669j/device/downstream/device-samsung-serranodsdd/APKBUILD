@@ -1,0 +1,25 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-serranodsdd
+pkgdesc="Samsung Galaxy S4 Mini (dual sim)"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armhf"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-serranodsdd mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+ec35002d45649a727914f50d7a7e94a6ba88d7016df8f251ee55c616df507995f9032b2d26a7fe9f60582684c89e8ec79346d91b59bf9bdaca0cbc012a5d3c12  deviceinfo
+"

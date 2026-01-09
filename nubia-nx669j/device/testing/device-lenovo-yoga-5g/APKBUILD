@@ -1,0 +1,39 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Jenneron <jenneron@protonmail.com>
+pkgname=device-lenovo-yoga-5g
+pkgdesc="Lenovo Yoga 5G"
+pkgver=4
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-qcom-sc8180x>=6.6.0
+	postmarketos-base
+	soc-qcom-sc8180x
+	systemd-boot
+"
+makedepends="devicepkg-dev"
+source="deviceinfo modules-initfs"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="WiFi firmware"
+	depends="firmware-lenovo-yoga-5g linux-firmware-ath10k soc-qcom-sc8180x-nonfree-firmware"
+	mkdir "$subpkgdir"
+}
+
+
+sha512sums="
+60b83494cf529893a0b929e15667db5bc941e9574568429d9c26b48eb09c584c5f30999b6181395e0386a6c320bc91ae8137c51522f5e77292f82986a6b694bc  deviceinfo
+438f30d14ad15fa87e5fa3b5127e5430af35cdddc400d2a01acbba6487792a602fcf3400e2c42ee991e6785fe62b083030ea977292efa88dacb3fcbe03bc32d7  modules-initfs
+"

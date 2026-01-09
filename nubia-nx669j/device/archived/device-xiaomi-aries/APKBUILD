@@ -1,0 +1,27 @@
+# Archived: Kernel does not build anymore
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-aries
+pkgdesc="Xiaomi Mi 2"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armhf"
+options="!check !archcheck"
+depends="postmarketos-base linux-xiaomi-aries mkbootimg mdss-fb-init-hack"
+makedepends="devicepkg-dev"
+source="deviceinfo initfs-hook.sh"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+bda49305552333101b46ff993e23497596359ae73e4e8fd19806a602553914eb54570751b4f571fd3a6d869792167d429bf858ebe4204379e0fdc670db8ceefe  deviceinfo
+73d199fdf7eccc2041ea8fabecc8b833d845791d5e7740b9d8e81e8fb917a0db55958f8c0d5499142a5726cf1ee40d6eb0ca16f7dc160276354d940b5abeeedc  initfs-hook.sh
+"

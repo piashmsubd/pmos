@@ -1,0 +1,33 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-kobo-nia
+pkgdesc="Kobo Nia"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-imx-ereader
+	kobo-epdc-extractor
+	postmarketos-base
+	u-boot-kobo-nia
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+be4fd2afda15820589d7b8fcba588697d3931e89a2a370cdee1fd090f28ab79020ecfb78ab60ed268d1ca90c851e344aed64164d7ed7e94e9783818aab8ed1c1  deviceinfo
+4f38f2805647406ff8114833aed585048f1d1412844c645b7fc9813acba7d4149db400ec942d293aee8f090f8369c295bad4d418c28563a33b41340102ff0263  modules-initfs
+"

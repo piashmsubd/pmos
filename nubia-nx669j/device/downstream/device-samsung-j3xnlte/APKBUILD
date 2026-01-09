@@ -1,0 +1,25 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-j3xnlte
+pkgdesc="Samsung Galaxy J3"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-j3xnlte mkbootimg mdss-fb-init-hack soc-sprd-audio-sc8830"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+649cdc792977bd0a2874b1737cb9201541c191cbb3bf43884b13f0d720b13129769d9d75472db953d61b5a80451e94d001dde3db8728bd7c365d5e757a567afe  deviceinfo
+"

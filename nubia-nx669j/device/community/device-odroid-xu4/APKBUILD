@@ -1,0 +1,32 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Henrik Grimler <henrik@grimler.se>
+
+pkgname=device-odroid-xu4
+pkgdesc="ODROID XU4"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-exynos5
+	postmarketos-base>=25-r1
+	u-boot-odroid
+	firmware-odroid-xu4
+	"
+makedepends="devicepkg-dev"
+source="deviceinfo modules-initfs"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+86fad219316bb27756048de7abd195b7736ed6750423edf9ed42a8b50e841af73f091af3e1f2c662cfa6838e3f50be3e04550101fbea1e429e7e5b3781841898  deviceinfo
+9f6c3cc0079e718ef0dfc221fadaf9bc092a8601b62794c2298eab893924af457612bd8a6e852fb2b181bee637e774dd2abea681eb72b1aa9c6672e686454795  modules-initfs
+"

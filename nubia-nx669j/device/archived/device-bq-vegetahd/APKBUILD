@@ -1,0 +1,34 @@
+# Archived: Kernel does not build anymore
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-bq-vegetahd
+pkgdesc="BQ Aquaris E5 HD"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-bq-vegetahd
+	mkbootimg
+	postmarketos-base
+	mtk-mkimage
+"
+makedepends="
+	devicepkg-dev
+"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+c6eb6140cbfbedfe9cde731329502db7c17366664dbc7813c5e7fc46a5914118d1dfec750ea27e435946d056077f2caf586a77798951caec565af8cd29edc6c6  deviceinfo
+"

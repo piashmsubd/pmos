@@ -1,0 +1,100 @@
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=linux-postmarketos-asahi
+pkgver=6.17.12_p1
+pkgrel=0
+_rel=${pkgver#*_p}
+_kver=${pkgver%_p*}
+_kver=${_kver//_/-}
+_asahiver=$_kver-$_rel
+pkgdesc="Kernel for Apple M-series devices"
+arch="aarch64"
+_carch="arm64"
+_flavor="postmarketos-asahi"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip
+	!check
+	!tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+	pmb:kconfigcheck-uefi
+	pmb:kconfigcheck-virt
+"
+makedepends="
+	bash
+	bc
+	bison
+	clang
+	clang-libclang
+	devicepkg-dev
+	diffutils
+	elfutils-dev
+	findutils
+	flex
+	git
+	linux-headers
+	lld
+	llvm
+	openssl-dev
+	pahole
+	perl
+	python3
+	rust
+	rust-bindgen
+	rust-src
+	rustfmt
+	sed
+	zstd
+"
+
+# Source
+_repository="linux"
+source="
+	$pkgname-$_asahiver.tar.gz::https://github.com/AsahiLinux/linux/archive/refs/tags/asahi-$_asahiver.tar.gz
+	config-postmarketos-asahi.aarch64
+	asahi.config
+	misc.config
+	pmos.config
+
+	0001-nvmem-apple-spmi-nvmem-Fix-CFI-failures.patch
+"
+builddir="$srcdir/linux-asahi-$_asahiver"
+_defconfig="defconfig"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$CARCH" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" LLVM=1 \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+}
+
+package() {
+	install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+			"$pkgdir/boot/linux.efi"
+
+	make modules_install dtbs_install \
+		ARCH="$_carch" \
+		LLVM=1 \
+		INSTALL_PATH="$pkgdir"/boot/ \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs-asahi
+
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+af3dfa6143e00384ee4820afb64587ea929a8808d5d61f397f9a78edb6097aafab18c35df7120deb42fb0bd6b899cdcbc6dbce23adff3df9c9bd6a0639158aae  linux-postmarketos-asahi-6.17.12-1.tar.gz
+a3f54b81b20fae3db8c77cb814066bdb0d5512f00b7f165f9849908d16b336733900cb0f428521cf52ea21cd25603b9958c88b6f58cf8ebb42b3cc134e649f29  config-postmarketos-asahi.aarch64
+c23c89cefc4690c69f9e18e12f542078e1231e3f3017624a1e1499bdf8ee132a95c7d8499fe4313d9b19922b043dd9ed7e743ddf046b6f298bbf4e665e4cdc7c  asahi.config
+0f9b91bcaf66a7004268e31a14d0e05a9d63da20a5a027cbcbaeb75453de4edf41abf34c422d04616a0f233cc86497a8939ab1f455e697990653a7a740ea46ef  misc.config
+83079bac1a13162cb276314fc991441701e76acd2606ba5b4ea5eec19fad0428deed84457360fe9dc4e821eb739ba31baff997b17643b53024f44a27edcf14a7  pmos.config
+5c07c59405356d1a14adbb98adbd9efde8352c1f07ab791d15a208c8fe262ce0dd47820694cb4b371b68b05917f19ec248c4c506d74b206e25a90acf7c070ded  0001-nvmem-apple-spmi-nvmem-Fix-CFI-failures.patch
+"

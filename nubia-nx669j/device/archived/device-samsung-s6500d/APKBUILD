@@ -1,0 +1,25 @@
+# Archived: Kernel does not build anymore
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-s6500d
+pkgdesc="Samsung Galaxy Mini 2"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armhf"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-s6500d mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+ad253318c7ecfe31a383bafd9b300226bedc2a554137d2024f3982cc673d40b6de01f932eb845764f0283fccc809cb5df9823ba61d627184865f80374f41c54c  deviceinfo
+"

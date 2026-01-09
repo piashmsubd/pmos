@@ -1,0 +1,30 @@
+# Archived: Kernel does not build anymore
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: gtrxAC <gtrxac2@gmail.com>
+pkgname=device-huawei-plank
+pkgdesc="Huawei Honor 7"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-huawei-plank
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+92ebb3f14228b9163a20c712ee86c3d0b384601bfaa8f50d464ab1a307555c567a5bee12868aa51f4001b5d68e33288008de33324a21962d30d3e20c540c16a6  deviceinfo
+"

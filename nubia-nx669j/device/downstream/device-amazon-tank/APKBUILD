@@ -1,0 +1,25 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-amazon-tank
+pkgdesc="Amazon Fire TV Stick (2nd Gen)"
+pkgver=2
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-amazon-tank mkbootimg"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+a26e04bfcc816d980b4cf4f6ff81bfb44aa405f4e2a50d32870c63abe4a43fecf1b0042361d48096e352f5867e26b4245e17e7dba9f25012a9991d961be32d93  deviceinfo
+"

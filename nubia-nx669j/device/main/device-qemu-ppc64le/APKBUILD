@@ -1,0 +1,56 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Jens Reidel <adrian@travitia.xyz>
+# Co-Maintainer: famfo <famfo@famfo.xyz>
+pkgname=device-qemu-ppc64le
+pkgver=6
+pkgrel=0
+pkgdesc="Simulated device in QEMU (ppc64le)"
+url="https://postmarketos.org"
+arch="ppc64le"
+license="MIT"
+depends="
+	grub-ieee1275
+	postmarketos-base
+	postmarketos-qemu-common
+	"
+makedepends="devicepkg-dev"
+subpackages="
+	$pkgname-kernel-lts:kernel_lts
+	$pkgname-kernel-virt:kernel_virt
+	$pkgname-kernel-stable:kernel_stable
+	"
+
+source="
+	deviceinfo
+	"
+options="!check !archcheck"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+kernel_lts() {
+	pkgdesc="Alpine LTS kernel (recommended)"
+	depends="linux-lts linux-firmware-none"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_virt() {
+	pkgdesc="Alpine Virt kernel (minimal, no audio)"
+	depends="linux-virt"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_stable() {
+	pkgdesc="Alpine Stable kernel"
+	depends="linux-stable linux-firmware-none"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+sha512sums="
+e27853254dcb297c219004498147b413a74163d4a00446e662255cfc5d4536e16abe0a8b24053c7ce6f65f48c90868c0fc02f05f14ce8e43a4645bfca4687429  deviceinfo
+"
