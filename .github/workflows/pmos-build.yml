@@ -46,8 +46,7 @@ jobs:
         env:
           PMBOOTSTRAP_WORK: ${{ github.workspace }}/workdir
         run: |
-          mkdir -p "$PMBOOTSTRAP_WORK"
-          cat > "$PMBOOTSTRAP_WORK/pmbootstrap.cfg" <<'EOF'
+          mkdir -p "$PMBOOTSTRAP_WORK" && cat > "$PMBOOTSTRAP_WORK/pmbootstrap.cfg" <<'EOF'
           [config]
           aports = /home/runner/work/pmos/pmos/pmaports
           channel = edge
