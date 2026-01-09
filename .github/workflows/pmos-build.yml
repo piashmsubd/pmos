@@ -35,8 +35,8 @@ jobs:
         run: |
           mkdir -p "$PMBOOTSTRAP_WORK"
           yes "" | pmbootstrap \
-            --aports "${{ github.workspace }}/pmaports" \
-            --workdir "$PMBOOTSTRAP_WORK" \
+            -p "${{ github.workspace }}/pmaports" \
+            -w "$PMBOOTSTRAP_WORK" \
             --mirror-alpine https://mirror.postmarketos.org \
             init
 
@@ -45,5 +45,5 @@ jobs:
           PMBOOTSTRAP_WORK: ${{ github.workspace }}/workdir
         run: |
           pmbootstrap \
-            --workdir "$PMBOOTSTRAP_WORK" \
+            -w "$PMBOOTSTRAP_WORK" \
             build linux-nubia-nx669j --force
