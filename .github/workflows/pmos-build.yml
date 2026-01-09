@@ -34,6 +34,11 @@ jobs:
           git -C pmaports init
           git -C pmaports remote remove origin || true
           git -C pmaports remote add origin https://gitlab.postmarketos.org/postmarketOS/pmaports.git
+          git -C pmaports config user.email "ci@example.com"
+          git -C pmaports config user.name "CI"
+          git -C pmaports add .
+          git -C pmaports commit -m "ci: snapshot pmaports" || true
+          git -C pmaports branch -M master
 
       - name: Initialize pmbootstrap
         env:
